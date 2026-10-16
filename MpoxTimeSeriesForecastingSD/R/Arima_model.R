@@ -1,8 +1,102 @@
 #ARIMA MODEL
 library(forecast)
 
-
+#ARIMA MODEL (maximum autoregressive order 8, matching the AR-Lasso)
 ARIMA_model <- function(train_data_ts_jur1,
+                        future_data_ts_jur1,
+                        future_real_ts_jur1,
+                        jur_name,
+                        n_step_ahead = 2,
+                        max_p = 8){
+  
+  #-------------------------------------------------
+  # PREPARE
+  #-------------------------------------------------
+  
+  week_number_forecast <- future_data_ts_jur1$Week_Number
+  list_date_week_start <- as.Date(future_data_ts_jur1$date_week_start)
+  
+  # keep only the jurisdiction column
+  train_week_t <- train_data_ts_jur1[[jur_name]]
+  
+  future_values <- future_data_ts_jur1[[jur_name]]
+  
+  future_real <- future_real_ts_jur1[[jur_name]]
+  
+  n_forecasts <- nrow(future_data_ts_jur1) - (n_step_ahead - 1)
+  
+  results_df <- data.frame()
+  
+  #-------------------------------------------------
+  # ROLLING FORECASTS
+  #-------------------------------------------------
+  
+  for(week_t in seq_len(n_forecasts)){
+    
+    print(paste0("week_t: ", week_t))
+    
+    #################################################
+    ## STEP 1
+    #################################################
+    
+    fit <- auto.arima(
+      train_week_t,
+      seasonal = FALSE,
+      stepwise = TRUE,
+      approximation = FALSE,
+      max.p = max_p,                 # autoregressive order capped at 8 (as for the AR-Lasso)
+      max.order = max_p + 2          # only used if stepwise = FALSE
+    )
+    
+    pred1 <- as.numeric(forecast(fit, h = 1)$mean)
+    
+    #################################################
+    ## STEP 2 (recursive)
+    #################################################
+    
+    extended_series <- c(train_week_t, pred1)
+    
+    fit2 <- auto.arima(
+      extended_series,
+      seasonal = FALSE,
+      stepwise = TRUE,
+      approximation = FALSE,
+      max.p = max_p,
+      max.order = max_p + 2
+    )
+    
+    pred2 <- as.numeric(forecast(fit2, h = 1)$mean)
+    
+    #################################################
+    ## SAVE RESULT
+    #################################################
+    
+    actual_value <- future_real[week_t + 1]
+    
+    df_t <- data.frame(
+      Week_Number     = week_number_forecast[week_t + 1],
+      date_week_start = list_date_week_start[week_t + 1],
+      Jurisdiction    = jur_name,
+      Predicted       = max(pred2, 0),
+      Actual          = actual_value
+    )
+    
+    results_df <- dplyr::bind_rows(results_df, df_t)
+    
+    #################################################
+    ## EXPAND TRAINING SET WITH OBSERVED WEEK
+    #################################################
+    
+    train_week_t <- c(train_week_t, future_values[week_t])
+    
+  }
+  
+  results_df$error <- results_df$Actual - results_df$Predicted
+  
+  return(results_df)
+}
+
+ARIMA_model_default <- function(train_data_ts_jur1,
                         future_data_ts_jur1,
                         future_real_ts_jur1,
                         jur_name,
@@ -90,6 +184,7 @@ ARIMA_model <- function(train_data_ts_jur1,
   
   return(results_df)
 }
+
 
 ARIMA_model_jurs <- function(train_data_ts, future_data_ts, future_real_ts, list_jur,
                              n_step_ahead = 2) {

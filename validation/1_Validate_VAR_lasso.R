@@ -10,7 +10,8 @@ YEAR_INTEREST = 2023
 data_year = data_mpox  %>% filter(Year >= YEAR_INTEREST)
 
 #RUN
-var_sd <- run_var_sd(data_year, TRAIN_WEEK, list_jur, correlation_threshold = 0.40)
+var_sd_01 <- run_var_sd(data_year, TRAIN_WEEK, list_jur, correlation_threshold = 0.40)
+
 
 #COEFFS
 df_coeffs = var_sd$result$results_var$df_coeffs
@@ -26,18 +27,44 @@ write.csv(df_coeffs_sd, file = paste0(FOLDER_SAVE, file_coeffs), row.names = FAL
 
 
 #PLOT
-title_plot = 'San diego, corr > 0.40'
-sd_var_forecasts = var_sd %>% filter(Jurisdiction == 'SanDiego')
+title_plot = 'San diego, Lambda fixed 0.5'
+sd_var_forecasts = var_sd$forecasts %>% filter(Jurisdiction == 'SanDiego')
 PLOT_FORECASTS_SINGLE_JURISDICITON(sd_var_forecasts, sd_var_forecasts, sd_var_forecasts,
                                    sd_var_forecasts,
                                    sd_var_forecasts, title_plot)
 
+#PLOT
+title_plot = 'San diego, Lambda fixed 0.1'
+sd_var_forecasts_01 = var_sd_01$forecasts %>% filter(Jurisdiction == 'SanDiego')
+PLOT_FORECASTS_SINGLE_JURISDICITON(sd_var_forecasts_01, sd_var_forecasts_01, sd_var_forecasts_01,
+                                   sd_var_forecasts_01,
+                                   sd_var_forecasts_01, title_plot)
+
+#Perf metrics
+perf_var = var_sd$overall
+perf_var_01 = var_sd_01$overall
+perf_var_cv = var_sd_lambda$overall
+
 #********************************************************************************* QED
 # QED
 
+#VALIDATE METHOD
+lambda = 0.05
+var_sd_check <- run_var_sd(data_year, TRAIN_WEEK, list_jur, lambda)
+
+lambda = 0.025
+var_sd_check_025 <- run_var_sd(data_year, TRAIN_WEEK, list_jur, lambda)
+
+lambda = 0.075
+var_sd_check_075 <- run_var_sd(data_year, TRAIN_WEEK, list_jur, lambda)
 
 
-
+#PLOT
+title_plot = 'San diego, Lambda fixed 0.025'
+sd_var_forecasts_075 = var_sd_check_075$forecasts %>% filter(Jurisdiction == 'SanDiego')
+PLOT_FORECASTS_SINGLE_JURISDICITON(sd_var_forecasts_025, sd_var_forecasts_025, sd_var_forecasts_025,
+                                   sd_var_forecasts_025,
+                                   sd_var_forecasts_025, title_plot)
 
 
 #***************************

@@ -5,6 +5,191 @@
 #*******************************
 
 #PLOT
+
+library(ggplot2); library(dplyr); library(scales)
+
+PLOT_WEEKLY_CASES <- function(
+    data_mpox,
+    list_jur,
+    title_plot = "Mpox Weekly Reported Cases. January 2023 - November 2024",
+    n_col_plot = 2,
+    n_row_plot = 3,
+    two_figures = TRUE,
+    n_per_figure = n_col_plot * n_row_plot,   # 6 per page by default
+    point_size = 1.6,
+    line_size = 0.8,
+    break_every = 8                           # label every 8th week (was 4)
+) {
+  
+  library(dplyr)
+  library(ggplot2)
+  library(ggh4x)
+  
+  jur_labels <- GET_JUR_LABELS()
+  
+  df_plot <- data_mpox %>%
+    filter(Jurisdiction %in% list_jur) %>%
+    mutate(
+      date_week_start   = as.Date(date_week_start),
+      Jurisdiction_orig = Jurisdiction,
+      Jurisdiction      = factor(jur_labels[Jurisdiction],
+                                 levels = jur_labels[list_jur])
+    ) %>%
+    arrange(Jurisdiction, date_week_start)
+  
+  #-----------------------------
+  # X AXIS (shared across all pages)
+  #-----------------------------
+  date_seq <- df_plot %>%
+    distinct(date_week_start) %>%
+    arrange(date_week_start) %>%
+    pull(date_week_start)
+  
+  idx <- seq(1, length(date_seq), by = break_every)
+  x_breaks <- date_seq[idx]
+  
+  # Add the final date only if it won't crowd the previous label
+  if (length(date_seq) - tail(idx, 1) >= break_every / 2) {
+    x_breaks <- c(x_breaks, tail(date_seq, 1))
+  }
+  
+  #-----------------------------
+  # PLOT FUNCTION
+  #-----------------------------
+  plot_subset <- function(subset_jur, page_title) {
+    
+    d <- df_plot %>% filter(Jurisdiction_orig %in% subset_jur)
+    d$Jurisdiction <- droplevels(d$Jurisdiction)
+    
+    ggplot(d, aes(x = date_week_start, y = Cases)) +
+      
+      geom_line(colour = "black", linewidth = line_size) +
+      geom_point(colour = "black", shape = 16, size = point_size) +
+      
+      scale_x_date(breaks = x_breaks, date_labels = "%m/%d/%y") +
+      
+      facet_wrap2(~Jurisdiction, scales = "free_y",
+                  axes = "all", ncol = n_col_plot, nrow = n_row_plot) +
+      
+      labs(x = "Date (week start date of reported cases)",
+           y = "Case counts",
+           title = page_title) +
+      
+      theme_minimal(base_size = 17) +
+      
+      theme(
+        plot.title       = element_text(size = 22, hjust = 0.5),
+        axis.text.x      = element_text(angle = 45, hjust = 1, size = 11),
+        axis.text.y      = element_text(size = 12),
+        axis.title.x     = element_text(size = 18),
+        axis.title.y     = element_text(size = 18),
+        strip.text       = element_text(size = 17),
+        panel.grid.minor = element_blank(),
+        panel.spacing    = unit(1, "lines")
+      )
+  }
+  
+  #-----------------------------
+  # PLOT (printed inside the function)
+  #-----------------------------
+  if (!two_figures) {
+    print(plot_subset(list_jur, title_plot))
+  } else {
+    jur_chunks <- split(list_jur,
+                        ceiling(seq_along(list_jur) / n_per_figure))
+    
+    plots <- lapply(jur_chunks, function(ch) plot_subset(ch, title_plot))
+    
+    invisible(lapply(plots, print))
+  }
+  
+  invisible(NULL)
+}
+
+PLOT_WEEKLY_CASES_ONE_FIGURE <- function(
+    data_mpox,
+    list_jur,
+    title_plot = "Mpox Weekly Reported Cases. January 2023 - November 2024",
+    n_col_plot = 2,
+    two_figures = FALSE,
+    n_per_figure = 4,
+    point_size = 1.6,
+    line_size = 0.8,
+    break_every = 4
+) {
+  
+  jur_labels <- GET_JUR_LABELS()
+  
+  df_plot <- data_mpox %>%
+    filter(Jurisdiction %in% list_jur) %>%
+    mutate(
+      date_week_start   = as.Date(date_week_start),
+      Jurisdiction_orig = Jurisdiction,
+      Jurisdiction      = factor(jur_labels[Jurisdiction],
+                                 levels = jur_labels[list_jur])
+    ) %>%
+    arrange(Jurisdiction, date_week_start)
+  
+  #-----------------------------
+  # X AXIS
+  #-----------------------------
+  date_seq <- df_plot %>%
+    distinct(date_week_start) %>%
+    arrange(date_week_start) %>%
+    pull(date_week_start)
+  
+  x_breaks <- date_seq[seq(1, length(date_seq), by = break_every)]
+  if (tail(date_seq, 1) != tail(x_breaks, 1)) {
+    x_breaks <- c(x_breaks, tail(date_seq, 1))
+  }
+  
+  #-----------------------------
+  # PLOT FUNCTION
+  #-----------------------------
+  plot_subset <- function(subset_jur) {
+    
+    d <- df_plot %>% filter(Jurisdiction_orig %in% subset_jur)
+    
+    ggplot(d, aes(x = date_week_start, y = Cases)) +
+      
+      geom_line(colour = "black", linewidth = line_size) +
+      geom_point(colour = "black", shape = 16, size = point_size) +
+      
+      scale_x_date(breaks = x_breaks, date_labels = "%m/%d/%y") +
+      
+      facet_wrap2(~Jurisdiction, scales = "free_y",
+                  axes = "all", ncol = n_col_plot) +
+      
+      labs(x = "Date (week start date of reported cases)",
+           y = "Case counts",
+           title = title_plot) +
+      
+      theme_minimal(base_size = 17) +
+      
+      theme(
+        plot.title       = element_text(size = 22, hjust = 0.5),
+        axis.text.x      = element_text(angle = 45, hjust = 1, size = 11),
+        axis.text.y      = element_text(size = 12),
+        axis.title.x     = element_text(size = 18),
+        axis.title.y     = element_text(size = 18),
+        strip.text       = element_text(size = 17),
+        panel.grid.minor = element_blank(),
+        panel.spacing    = unit(1, "lines")
+      )
+  }
+  
+  #-----------------------------
+  # RETURN PLOTS
+  #-----------------------------
+  if (!two_figures) {
+    return(plot_subset(list_jur))
+  } else {
+    jur_chunks <- split(list_jur,
+                        ceiling(seq_along(list_jur) / n_per_figure))
+    plot_list <- lapply(jur_chunks, function(ch) print(plot_subset(ch)))
+    invisible(plot_list)
+  }
+}
 #*******************************
 #* PLOT FORECAST FUNCTIONS
 #*******************************
@@ -218,14 +403,14 @@ PLOT_FORECASTS_SINGLE_JURISDICITON <- function(
     theme_minimal(base_size = 17) +
     
     theme(
-      plot.title = element_text(size = 22, hjust = 0.5),
+      plot.title = element_text(size = 25, hjust = 0.5),
       legend.position = "bottom",
-      legend.text = element_text(size = 18),
-      legend.title = element_text(size = 16),
+      legend.text = element_text(size = 20),
+      legend.title = element_text(size = 17),
       axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
-      axis.text.y = element_text(size = 16),
-      axis.title.y = element_text(size = 18),
-      axis.title.x = element_text(size = 18),
+      axis.text.y = element_text(size = 18),
+      axis.title.y = element_text(size = 19),
+      axis.title.x = element_text(size = 19),
       legend.key.size = unit(1.2, "lines"),
       legend.key.width = unit(2, "cm"),
       legend.key.height = unit(0.8, "cm")
@@ -612,4 +797,37 @@ GET_JUR_LABELS <- function(){
   
 }
 
+# The five models must be scored on the same forecast weeks
+check_same_weeks <- function(forecast_list) {
+  n_rows <- sapply(forecast_list, nrow)
+  if (length(unique(n_rows)) > 1) {
+    warning("Different numbers of forecast rows: ", paste(names(n_rows), n_rows, collapse = ", "))
+  }
+  if (all(sapply(forecast_list, function(x) "Week_Number" %in% names(x)))) {
+    wk <- lapply(forecast_list, function(x) sort(unique(x$Week_Number)))
+    if (!all(sapply(wk, identical, wk[[1]]))) warning("The models forecast different weeks.")
+  }
+  invisible(n_rows)
+}
 
+#FINAL PLOT
+Plot_final_models <- function(var_output, nb_output, ar_output, arima_output, naive_output, title_plot,
+                                jurisdiction_interest = "SanDiego") {
+
+  #uf <- lapply(univariate_results$forecasts, function(x) x %>% filter(Jurisdiction == jurisdiction_interest))
+  check_same_weeks(list(VAR = var_output$forecasts, AR = ar_output$forecasts$AR_Lasso, ARIMA = arima_output$forecasts$ARIMA,
+                        NB = nb_output$forecasts, Naive = naive_output$forecasts$Naive))
+  PLOT_FORECASTS_SINGLE_JURISDICITON(var_output$forecasts, ar_output$forecasts$AR_Lasso, arima_output$forecasts$ARIMA,
+                                     nb_output$forecasts, naive_output$forecasts$Naive, title_plot)
+}
+
+# Print the train and test windows -- compare with the methods text
+print_split_check <- function(data_mpox, TRAIN_WEEK, list_jur) {
+  d <- data_mpox %>% filter(Jurisdiction %in% list_jur)
+  split <- get_train_test_data(d, TRAIN_WEEK)
+  tr <- GET_TS_DATA(split$train_data)
+  fu <- GET_TS_DATA(split$future_data)
+  cat("Train:", format(min(as.Date(tr$date_week_start))), "to", format(max(as.Date(tr$date_week_start))),
+      "(", nrow(tr), "weeks )  |  Test:", format(min(as.Date(fu$date_week_start))), "to",
+      format(max(as.Date(fu$date_week_start))), "(", nrow(fu), "weeks )\n")
+}

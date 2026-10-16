@@ -1,7 +1,7 @@
 #RUN AR MODEL
 
 run_AR_model <- function(data_mpox, ROLL_WINDOW, TRAIN_WEEK,
-                                  jurs_selection, n_lags_ar = 25) {
+                                  jurs_selection, Jurisdiction, n_lags_ar = 25) {
   
   data_raw <- data_mpox %>% filter(Jurisdiction %in% jurs_selection)
   split <- get_train_test_data(data_raw, TRAIN_WEEK)
@@ -25,6 +25,7 @@ run_AR_model <- function(data_mpox, ROLL_WINDOW, TRAIN_WEEK,
   
   df_slope <- GET_DF_WEIGHTED_SLOPE(data_model, jurs_selection)
   
+  browser()
   build_jur_metrics <- function(forecasts, model_name) {
     jm <- GET_METRICS_JURISDICTION(forecasts, jurs_selection)
     js <- GET_SLOPE_METRICS_JURISDICTION(forecasts, df_slope, jurs_selection)
@@ -50,9 +51,10 @@ run_AR_model <- function(data_mpox, ROLL_WINDOW, TRAIN_WEEK,
 
 
 #AR MODEL
+Jurisdiction = 'SanDiego'
 jurs_selection = c("SanDiego") #, "Illinois")
 TRAIN_WEEK = 84
-ar_results = run_AR_model(data_year, 0, TRAIN_WEEK, jurs_selection)
+ar_results_pen = run_AR_model(data_year, 0, TRAIN_WEEK, jurs_selection, Jurisdiction)
 
 #COEFFS
 coeffs_ar2 = ar_results$df_coeffs
@@ -61,7 +63,7 @@ coeffs_ar2 = ar_results$df_coeffs
 #PLOT
 
 title_plot = 'AR model. San diego'
-ar_forecasts = ar_results$forecasts$AR_Lasso
+ar_forecasts = ar_results_pen$forecasts$AR_Lasso
 #var_forecasts_05 %>% filter(Jurisdiction == 'SanDiego')
 PLOT_FORECASTS_SINGLE_JURISDICITON(ar_forecasts, ar_forecasts, ar_forecasts,
                                    ar_forecasts,
@@ -87,3 +89,8 @@ df %>% filter(Predictor == "SanDiego_L20") %>% arrange(Week_Number) %>%
   dplyr::select(Week_Number, Coefficient)
 
 
+#AR HIERARCHICAL MODEL
+
+jurs_selection = c("SanDiego") #, "Illinois")
+TRAIN_WEEK = 84
+ar_results_sparse = run_AR_model(data_year, 0, TRAIN_WEEK, jurs_selection)

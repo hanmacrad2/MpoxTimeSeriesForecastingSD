@@ -14,7 +14,7 @@ library(dplyr)
 # NEG_BIN_FORECAST loaded) and run_univariate_models.
 # ============================================================
 
-run_var_sd <- function(data_mpox, TRAIN_WEEK, list_jur, lambda_value,
+xxrun_var_sd <- function(data_mpox, TRAIN_WEEK, list_jur, lambda_value,
                        jurisdiction_interest = "SanDiego",
                        correlation_threshold = NA, n_lags = 25) {
   

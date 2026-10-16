@@ -101,16 +101,15 @@ VAR_LASSO_FORECAST_TWO_STEP <- function(train_data_ts, future_data_ts, future_re
 }
 
 #RUN
-run_var_sd <- function(data_mpox, TRAIN_WEEK, list_jur,
+run_var_sd <- function(data_mpox, TRAIN_WEEK, list_jur, lambda,
                        jurisdiction_interest = "SanDiego",
-                       correlation_threshold = 0.4, n_lags = 25) {
+                      n_lags = 25) {
   
   if (!(jurisdiction_interest %in% list_jur)) stop(jurisdiction_interest, " is not in list_jur")
   if (length(list_jur) < 2) stop("list_jur has no predictors -- VAR-Lasso needs at least one.")
   
   result <- RUN_VAR(jurisdiction_interest, data_mpox,
-                    TRAIN_WEEK, list_jur,
-                    correlation_threshold, 
+                    TRAIN_WEEK, list_jur, lambda,
                     ROLL_WINDOW = 0, n_lags = n_lags)
   
   # Your RUN_VAR, unchanged: VAR-Lasso is fitted on ALL of list_jur
@@ -136,7 +135,7 @@ run_var_sd <- function(data_mpox, TRAIN_WEEK, list_jur,
 
 #RUN VAR
 RUN_VAR <- function(jurisdiction_interest, data_mpox, TRAIN_WEEK,
-                    list_jur, correlation_threshold, ROLL_WINDOW = 0, n_lags = 25){
+                    list_jur, lambda, ROLL_WINDOW = 0, n_lags = 25){
   
   #-------------------------------------------------
   # PREPARE DATA
@@ -150,25 +149,24 @@ RUN_VAR <- function(jurisdiction_interest, data_mpox, TRAIN_WEEK,
   
   train_ts  <- GET_TS_DATA(split$train_data)
   future_ts <- GET_TS_DATA(split$future_data)
+  data_model <- data_mpox
   
   #SMOOTH
   if(ROLL_WINDOW != 0){
     #data_model <- GET_SMOOTH_DATA(data_mpox, ROLL_WINDOW)
+    #train_ts_smooth  <- GET_TS_DATA(split_smooth$train_data)
+    #future_ts_smooth <- GET_TS_DATA(split_smooth$future_data)
+    # split_smooth <- get_train_test_data(data_model, TRAIN_WEEK)
   } else {
-    data_model <- data_mpox   # <-- FIX: was undefined when ROLL_WINDOW == 0
+    #data_model <- data_mpox   # <-- FIX: was undefined when ROLL_WINDOW == 0
   }
-  
-  split_smooth <- get_train_test_data(data_model, TRAIN_WEEK)
-  
-  train_ts_smooth  <- GET_TS_DATA(split_smooth$train_data)
-  future_ts_smooth <- GET_TS_DATA(split_smooth$future_data)
   
   #-------------------------------------------------
   # RUN
   #-------------------------------------------------
   ## VAR-Lasso
-  results_var <- VAR_LASSO_FORECAST_TWO_STEP(
-    train_ts_smooth, future_ts_smooth, future_ts, ROLL_WINDOW, n_lags = n_lags
+  results_var <- VAR_LASSO_FORECAST_TWO_STEP_CHECK_LAMBDA(
+    train_ts, future_ts, future_ts, ROLL_WINDOW, lambda, n_lags = n_lags
   )
   
   var_forecasts = results_var$df_pred_results
@@ -192,7 +190,7 @@ RUN_VAR <- function(jurisdiction_interest, data_mpox, TRAIN_WEEK,
   #PLOT_CASES_FORECASTS(var_forecasts, var_forecasts, var_forecasts, var_forecasts, var_forecasts, list_jur, title_plot)
   
   #PLOT SAN DIEGO
-  title_plot = paste0(jurisdiction_interest, ' VAR-Lasso forecasts. Correlation threshold: ', correlation_threshold)
+  title_plot = paste0(jurisdiction_interest, ' VAR-Lasso forecasts, lambda: ', lambda)
   jur_var_forecasts = var_forecasts %>% filter(Jurisdiction == jurisdiction_interest)
   PLOT_FORECASTS_SINGLE_JURISDICITON(jur_var_forecasts, jur_var_forecasts, jur_var_forecasts,
                                      jur_var_forecasts,
@@ -600,6 +598,120 @@ VAR_LASSO_FORECAST_TWO_STEP_CI <- function(train_data_ts, future_data_ts, future
   print(summary(results_df$error))
   
   # Wide-format
+  df_pred <- pivot_wider(results_df, names_from = Jurisdiction, values_from = Predicted) %>%
+    arrange(Week_Number)
+  df_true <- pivot_wider(results_df, names_from = Jurisdiction, values_from = Actual) %>%
+    arrange(Week_Number)
+  
+  return(list(
+    df_pred_results = results_df,
+    preds = df_pred,
+    true = df_true,
+    df_coeffs = df_coeffs,
+    coeffs_final = coef(cv_model_tmp_2)
+  ))
+}
+
+#*********************
+#* VAR LASSO
+
+#MODEL
+VAR_LASSO_FORECAST_TWO_STEP_CHECK_LAMBDA <- function(train_data_ts, future_data_ts, future_real_ts,
+                                        ROLL_WINDOW, lambda, n_lags = 25) {
+  'Recursive 2-step-ahead VAR Lasso forecasts — saving only the t+2 prediction as a dataframe'
+  
+  print(paste0('N States: ', (ncol(train_data_ts) - 2)))
+  print(paste0('Roll window: ', ROLL_WINDOW))
+  print(paste0('N lags: ', n_lags))
+  print(paste0('N step_ahead: ', 2))
+  
+  week_number_forecast <- future_data_ts$Week_Number
+  list_date_week_start <- as.Date(future_data_ts$date_week_start)
+  train_data_ts <- train_data_ts %>% dplyr::select(-Week_Number, - date_week_start)
+  future_data_ts <- future_data_ts %>% dplyr::select(-Week_Number, - date_week_start)
+  future_real_ts = future_real_ts  %>% dplyr::select(-Week_Number, - date_week_start)
+  
+  juris_names <- colnames(train_data_ts)
+  n_forecasts <- nrow(future_data_ts) - 1
+  
+  results_df <- data.frame()
+  df_coeffs <- data.frame()
+  train_week_t <- train_data_ts 
+  
+  for (week_t in 1:n_forecasts) { 
+    cat('Forecast', week_t, '=> predicting week:', week_number_forecast[week_t + 1], '\n')
+    
+    # 1. Difference training data
+    train_diff <- diff(as.matrix(train_week_t), differences = 1)
+    
+    #2. Fit VAR Lasso model on differenced data
+    print(paste0('LAMBDA: ', lambda))
+    model_tmp <- constructModel(train_diff, p = n_lags, struct = 'Basic',
+                                gran = c(lambda), ownlambdas = TRUE,
+                                T1 = floor(nrow(train_diff) * 0.65), verbose = FALSE)
+
+    # model_tmp <- constructModel(train_diff, p = n_lags, struct = "Basic",
+    #                                  gran = c(50, 10), ownlambdas = FALSE,
+    #                                  T1 = floor(nrow(train_diff) * 0.65),
+    #                                  verbose = FALSE)
+    
+    cv_model_tmp <- cv.BigVAR(model_tmp)
+    #residuals <- cv_model_tmp@resids   
+    
+    # 3. Save non-zero coefficients
+    coefficients <- coef(cv_model_tmp)
+    df_coeffs_t <- EXTRACT_NONZERO_LASSO_COEFFS(coefficients, juris_names)
+    df_coeffs_t$Week_Number <- rep(week_number_forecast[week_t], nrow(df_coeffs_t))
+    df_coeffs <- rbind(df_coeffs, df_coeffs_t)
+    
+    # 4. Step 1 forecast (t+1)
+    last_obs <- as.numeric(tail(train_week_t, 1))
+    pred_diff_t1 <- predict(cv_model_tmp, n.ahead = 1)
+    #print(paste0('pred_diff_t1: ', pred_diff_t1))
+    level_t1 <- last_obs + as.numeric(pred_diff_t1)
+    
+    # 5. Step 2 forecast (t+2)
+    extended_series <- rbind(train_week_t, level_t1)
+    extended_diff <- diff(as.matrix(extended_series), differences = 1)
+    
+    model_tmp2 <- constructModel(extended_diff, p = n_lags, struct = 'Basic',
+                                 gran = c(lambda), ownlambdas = TRUE,
+                                 T1 = floor(nrow(extended_diff) * 0.65), verbose = FALSE)
+
+    # model_tmp2 <- constructModel(extended_diff, p = n_lags, struct = "Basic",
+    #                             gran = c(50, 10), ownlambdas = FALSE,
+    #                             T1 = floor(nrow(train_diff) * 0.65),
+    #                             verbose = FALSE)
+    
+    cv_model_tmp_2 <- cv.BigVAR(model_tmp2)
+    
+    pred_diff_t2 <- predict(cv_model_tmp_2, n.ahead = 1)
+    level_t2 <- level_t1 + as.numeric(pred_diff_t2)
+    
+    # 6. Get actual values
+    actual_values <- as.numeric(future_real_ts[week_t + 1, ])
+    
+    # 7. Save results to long-format dataframe
+    df_t <- data.frame(
+      Week_Number = rep(week_number_forecast[week_t + 1], length(juris_names)),
+      date_week_start = rep(as.Date(list_date_week_start[week_t + 1]), length(juris_names)),
+      Jurisdiction = juris_names,
+      Predicted = pmax(level_t2, 0),  # clip negatives
+      Actual = actual_values,
+      bic_value = cv_model_tmp@BICMSFE  
+    )
+    
+    results_df <- bind_rows(results_df, df_t)
+    
+    # 8. Extend training set
+    train_week_t <- rbind(train_data_ts, head(future_data_ts, week_t))
+  }
+  
+  results_df <- results_df %>%
+    mutate(error = Actual - Predicted)
+  print(summary(results_df$error))
+  
+  # Also create wide-format versions (optional)
   df_pred <- pivot_wider(results_df, names_from = Jurisdiction, values_from = Predicted) %>%
     arrange(Week_Number)
   df_true <- pivot_wider(results_df, names_from = Jurisdiction, values_from = Actual) %>%

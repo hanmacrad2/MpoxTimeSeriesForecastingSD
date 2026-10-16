@@ -1,8 +1,9 @@
 #1. DATA SETUP 
 
 #RUN TEST SET
-library(VARLASSOMpox)
+#library(VARLASSOMpox)
 library(forecast)
+library(dplyr)
 
 #FIX!! 
 FOLDER = "C:/Users/h2cra/OneDrive/Documents/GitHub/Mpox_VAR_LASSO_Automate/"
@@ -23,3 +24,14 @@ list_jur <- c("NewYorkCity", "LA", "Illinois", "Colorado", "SanDiego",
                   "Philadelphia", "Ohio", "Georgia", "NewJersey", "NewYork", "Massachusetts")
 
 data_model = data_year %>% filter(Jurisdiction %in% list_jur)
+
+
+#PLOT
+PLOT_WEEKLY_CASES(data_year, list_jur)
+
+# single figure, 11 panels in 3 columns
+p <- PLOT_WEEKLY_CASES(data_year, list_jur, n_col_plot = 2, break_every = 8)
+p
+
+ggsave("mpox_weekly_cases.png", p, width = 18, height = 14, dpi = 300)
+
