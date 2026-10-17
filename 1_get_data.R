@@ -20,9 +20,9 @@ YEAR_INTEREST = 2023
 data_year = data_mpox  %>% filter(Year >= YEAR_INTEREST)
 
 #JURISDICTIONS
-list_jur <- c("NewYorkCity", "LA", "Illinois", "Colorado", "SanDiego",
-                  "Philadelphia", "Ohio", "Georgia", "NewJersey", "NewYork", "Massachusetts")
-
+list_jur <- c("NewYorkCity", "LA", "Georgia", "Illinois", "NewJersey",
+              "SanDiego",  "Philadelphia",  "Colorado", "Massachusetts",  "Ohio", "NewYork")    
+  
 data_model = data_year %>% filter(Jurisdiction %in% list_jur)
 
 
