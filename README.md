@@ -81,3 +81,7 @@ Scripts are in `R/`:
 1. Set `FOLDER` and `DATA_FOLDER` to your local paths.
 2. Load `data_mpox.xlsx` and filter `Year >= 2023`.
 3. Run the final-model block: `run_var_sd`, `run_nb_sd`, `run_AR_model`, `run_ARIMA_model`, `run_naive_model`, then compare with `bind_rows(...$overall)`.
+
+## References
+
+1. Centers for Disease Control and Prevention, National Center for Emerging and Zoonotic Infectious Diseases. *U.S. Case Data: Monkeypox.* Trends of monkeypox cases reported to CDC by date. Published September 16, 2024; updated October 8, 2026 (data reported to CDC as of October 1, 2026). Available at: https://www.cdc.gov/monkeypox/data-research/cases/index.html. Accessed November 6, 2026. **[CONFIRM: replace the access date with the date you downloaded the data used in the paper; the page is updated monthly and 2024 onward counts are preliminary, so later downloads can differ.]**
