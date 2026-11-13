@@ -43,8 +43,8 @@ This is an *event date* when onset or diagnosis is available, and otherwise a *r
 |---|---|
 | `Jurisdiction` | Reporting jurisdiction. Model uses 11: NewYorkCity, LA, Georgia, Illinois, NewJersey, SanDiego, Philadelphia, Colorado, Massachusetts, Ohio, NewYork. |
 | `Year` | Calendar year of the week. Models use `Year >= 2023`. |
-| `date_week_start` | First day of the week for the case date above. **[CONFIRM: Sunday (MMWR/epi week) or Monday (ISO week)]** |
-| `Week_Number` | Running week index within the full series. Train/test split is at `TRAIN_WEEK = 84`; out-of-sample forecasts are for weeks 86 to 130 (45 weeks). **[CONFIRM: week 1 = which calendar week]** |
+| `date_week_start` | First day of the week for the case date above.|
+| `Week_Number` | Running week index within the full series. Train/test split is at `TRAIN_WEEK = 84`; out-of-sample forecasts are for weeks 86 to 130 (45 weeks). |
 | `Cases` | Number of Mpox cases in that jurisdiction-week. |
 
 ### Week definition
@@ -55,11 +55,11 @@ This is an *event date* when onset or diagnosis is available, and otherwise a *r
 
 ## Reproducibility
 
-* **Software:** R version **[CONFIRM]**; packages `forecast`, `dplyr`, `tidyr`, `readxl`, `ggplot2`, plus the Lasso/VAR packages loaded in `libs_required.R` **[CONFIRM versions; run `sessionInfo()` and paste the output below]**
-* **Operating system:** **[CONFIRM, e.g., Windows 11]**
-* **Random seed:** **[CONFIRM: set.seed value, if any, used for cross-validation of lambda]**
+* **Software:** R version **[CONFIRM]**; packages `forecast`, `dplyr`, `tidyr`, `readxl`, `ggplot2`, plus the Lasso/VAR packages loaded in `libs_required.R` 
+* **Operating system:**:
+* **Random seed:** 
 * **Hyperparameters:** `lambda = 0.05`, `TRAIN_WEEK = 84`, maximum 25 weekly lags for VAR-Lasso, `n_lags_ar = 8` for AR-Lasso, `max_p = 8` for ARIMA, naïve persistence `window = 1`
-* **Edge handling:** **[CONFIRM: no smoothing is applied to the series, so no beginning or end weeks are dropped. If smoothing is used, state the method and which weeks are dropped. The first 25 weeks of the training period serve as lagged predictors and are not themselves forecast.]**
+* **Edge handling: No smoothing**
 * **Forecast design:** rolling two-week-ahead forecasts, fitted on data through week 84 and evaluated out of sample on 2024 weeks.
 
 ### Running the code
