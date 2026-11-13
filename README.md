@@ -14,13 +14,12 @@ Understanding these definitions is essential for interpreting the lag structure 
 
 ### Data source
 
-Weekly Mpox case counts by U.S. jurisdiction, from the Centers for Disease Control and Prevention (CDC) national Mpox surveillance data. San Diego County data were obtained in collaboration with the County of San Diego Health and Human Services Agency. **[CONFIRM: CDC dataset name/URL and date of download]**
+Weekly Mpox case counts by U.S. jurisdiction, from the Centers for Disease Control and Prevention (CDC) national Mpox surveillance data. San Diego County data were obtained in collaboration with the County of San Diego Health and Human Services Agency. 
 
 ### Case definition
 
 * Case counts include persons who tested positive for either monkeypox virus or orthopoxvirus, as described in the [CDC case definition](https://www.cdc.gov/monkeypox/php/case-definitions/index.html).
 * Counts include all Mpox cases (clade I and clade II) reported to CDC.
-* **[CONFIRM: whether counts are confirmed only or confirmed + probable, and whether imported vs. locally acquired cases are distinguished. The CDC series does not distinguish them, so the model uses total reported cases.]**
 
 ### Date definition
 
@@ -31,7 +30,7 @@ The date assigned to each case is the **earliest date available** for that case,
 3. positive laboratory test report date, or
 4. date reported to CDC.
 
-This is an *event date* when onset or diagnosis is available, and otherwise a *reporting date*. Weekly counts, and therefore lags, are measured on this date. **[CONFIRM: whether SDC data follow the same hierarchy as the CDC data.]**
+This is an *event date* when onset or diagnosis is available, and otherwise a *reporting date*. Weekly counts, and therefore lags, are measured on this date.
 
 ### Data notes
 
