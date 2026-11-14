@@ -16,8 +16,7 @@ The study forecasts weekly Mpox cases in San Diego County (SDC) two weeks ahead 
 MpoxTimeSeriesForecastingSD/            <- repository root (this folder)
 ├── README.md                           <- this file
 ├── libs_required.R                     <- installs and loads the required packages and our package
-├── 01_get_data_and_plot.R              <- [CONFIRM: purpose]
-├── 1_get_data_local.R                  <- [CONFIRM: purpose]
+├── 01_get_data_and_plot.R              <- Load data, filter and plot
 ├── 2_Run_forecast_models.R             <- runs the five models and compares them
 ├── Analysis/                           <- one script per table or figure
 │   ├── 01_Data_summary_statistics_tab1.R
@@ -51,7 +50,7 @@ MpoxTimeSeriesForecastingSD/            <- repository root (this folder)
    ```
    Or from the command line, in the repository root: `R CMD INSTALL MpoxTimeSeriesForecastingSD`.
 3. **Load the packages.** `source("libs_required.R")` installs any missing dependencies, loads them, and loads our package last.
-4. **Get the data.** Run `1_get_data_local.R` after setting `FOLDER` and `DATA_FOLDER` to your local paths. See **Data** below. [CONFIRM: whether `data_mpox.xlsx` is included in the repository or must be downloaded.]
+4. **Get the data.** Run `1_get_data_local.R` after setting `FOLDER` and `DATA_FOLDER` to your local paths. See **Data** below. 
 5. **Run the models.** `2_Run_forecast_models.R` fits the VAR-Lasso and the four comparison models over the 45 rolling forecasts and produces the comparison table (Table 2) and forecast figure (Figure 5).
 6. **Reproduce a specific table or figure.** Run the matching script in `Analysis/` (table below). Run step 5 first, because the scripts read its results.
 
@@ -108,9 +107,9 @@ Always pass `lambda = 0.1` and the lag arguments explicitly. Some function defau
 
 ## Data
 
-**Source.** Weekly Mpox case counts by U.S. jurisdiction from the CDC National Surveillance System, 1 January 2023 to 24 November 2024 (the most recent data available). [CONFIRM and match Methods Section 4.1: if San Diego County counts were supplied directly by CSDHHSA rather than taken from the CDC release, say so here.] Data are used as released, at the geographic level at which each jurisdiction reports (state, county or city), with no aggregation or adjustment. New York State is analyzed excluding New York City.
+**Source.** Weekly Mpox case counts by U.S. jurisdiction from the CDC National Surveillance System, 1 January 2023 to 24 November 2024 (the most recent data available). Data are used as released, at the geographic level at which each jurisdiction reports (state, county or city), with no aggregation or adjustment. New York State is analyzed excluding New York City.
 
-**Availability.** [CONFIRM: state whether `data_mpox.xlsx` is in this repository. If not, give the CDC link below and the steps to rebuild it.]
+**Availability.** 
 
 **Genomic data (phylogeographic analysis).** The phylogeographic analysis (TreeTime, BEAST X) was run separately and is not part of this repository. The MPXV genomes are available through GISAID (EPI_SET_260729rw, https://doi.org/10.55876/gis8.260729rw), and the NCBI accessions are listed in `data/ncbi_accessions.txt`. Genomes from New York City were shared under a Data Use Agreement and have since been submitted to NCBI.
 
@@ -122,7 +121,7 @@ Understanding these definitions is essential for interpreting the lag structure 
 
 **Date definition.** Each case is assigned the earliest date available, which is one of: date of illness onset, diagnosis date, positive laboratory test report date, or date reported to CDC. This is an event date when onset or diagnosis is available and otherwise a reporting date. Weekly counts, and therefore lags, are measured on this date.
 
-**Week definition.** [CONFIRM: epidemiological (MMWR) week or ISO week, and the weekday on which `date_week_start` falls.] One lag is one week, so a lag of 24 weeks is about 5.5 months.
+**Week definition.** [epidemiological (MMWR) week or ISO week, and the weekday on which `date_week_start` falls.] One lag is one week, so a lag of 24 weeks is about 5.5 months.
 
 **Variables.**
 
@@ -140,10 +139,11 @@ Understanding these definitions is essential for interpreting the lag structure 
 
 | Item | Setting |
 |---|---|
-| R version | [CONFIRM, e.g. from `R.version.string`] |
-| Operating system | [CONFIRM, e.g. from `sessionInfo()`] |
+| R version | R version 4.6.1 (2026-06-24 ucrt) |
+| Operating system | Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26200) |
 | Package versions | See `sessionInfo.txt` in this repository [CONFIRM: generate it, see below]. Our own package is version 0.1.0. |
-| Random seed | [CONFIRM] No random number generation is used in the forecasting. All models are fitted at a fixed penalty, so results are deterministic. |
+| Random seed | No random number generation is used in the forecasting. All models are fitted at a fixed penalty, so results are deterministic. |
 | Training period | January to December 2023 (`TRAIN_WEEK = 84`, confirmed with `print_split_check()`) |
 | Evaluation | 45 rolling two-week-ahead forecasts, January to November 2024 (weeks 86 to 130) |
 | VAR-Lasso | `lambda = 0.1`, maximum 25 weekly lags, SDC plus ten predictor jurisdictions, first-differenced counts |
@@ -168,8 +168,8 @@ writeLines(capture.output(sessionInfo()), "sessionInfo.txt")
 
 ## Citation and contact
 
-If you use this code or package, please cite the paper above. Contact: [name, email]. License: [CONFIRM].
+If you use this code or package, please cite the paper above. 
 
 ## References
 
-1. Centers for Disease Control and Prevention. *U.S. Case Data: Monkeypox.* https://www.cdc.gov/monkeypox/data-research/cases/index.html. [CONFIRM the access date.]
+1. Centers for Disease Control and Prevention. *U.S. Case Data: Monkeypox.* https://www.cdc.gov/monkeypox/data-research/cases/index.html. 

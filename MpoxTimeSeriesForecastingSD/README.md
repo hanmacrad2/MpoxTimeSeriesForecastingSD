@@ -37,7 +37,7 @@ Or from the command line, in the repository root:
 R CMD INSTALL MpoxTimeSeriesForecastingSD
 ```
 
-Then load it with `library(MpoxTimeSeriesForecastingSD)`. Requires R >= [version]. The package attaches its dependencies (`dplyr`, `tidyr`, `tibble`, `ggplot2`, `ggh4x`, `scales`, `reshape2`, `BigVAR`, `mpath`, `forecast`), which are installed with it. [CONFIRM against `DESCRIPTION`.]
+Then load it with `library(MpoxTimeSeriesForecastingSD)`. Requires R >= [version]. The package attaches its dependencies (`dplyr`, `tidyr`, `tibble`, `ggplot2`, `ggh4x`, `scales`, `reshape2`, `BigVAR`, `mpath`, `forecast`), which are installed with it. 
 
 ## Input data
 
@@ -51,7 +51,7 @@ The package does not include the case data. Supply a data frame with one row per
 | `date_week_start` | Start date of the reporting week |
 | `Cases` | Reported weekly case count (raw, not smoothed) |
 
-Definitions of the case, date and week are in the Data Dictionary in the repository README. [CONFIRM: say whether the paper data are included in the repository.]
+Definitions of the case, date and week are in the Data Dictionary in the repository README. 
 
 ## Quick start
 
@@ -139,4 +139,4 @@ Every function has a docstring at the top of its body that describes its argumen
 
 ## Citation
 
-If you use this package, please cite the paper above and, once released, the package: [CONFIRM: add a DOI if you archive a release, for example on Zenodo].
+If you use this package, please cite the paper above and, once released, the package
