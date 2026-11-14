@@ -1,0 +1,629 @@
+* using log directory 'C:/Users/h2cra/OneDrive/Documents/GitHub/MpoxTimeSeriesForecastingSD/MpoxTimeSeriesForecastingSD.Rcheck'
+* using R version 4.6.1 (2026-06-24 ucrt)
+* using platform: x86_64-w64-mingw32
+* R was compiled by
+    gcc.exe (GCC) 14.3.0
+    GNU Fortran (GCC) 14.3.0
+* running under: Windows 11 x64 (build 26200)
+* using session charset: UTF-8
+* current time: 2026-11-14 02:31:01 UTC
+* checking for file 'MpoxTimeSeriesForecastingSD/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'MpoxTimeSeriesForecastingSD' version '0.1.0'
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking whether package 'MpoxTimeSeriesForecastingSD' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... NOTE
+Malformed Description field: should contain one or more complete sentences.
+Non-standard license specification:
+  licence to be determined
+Standardizable: FALSE
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking code files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking dependencies in R code ... NOTE
+Namespace in Imports field not imported from: 'patchwork'
+  All declared Imports should be used.
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+ARIMA_model: no visible global function definition for 'auto.arima'
+ARIMA_model: no visible global function definition for 'forecast'
+AR_model: no visible global function definition for '%>%'
+AR_model: no visible binding for global variable 'Week_Number'
+AR_model: no visible binding for global variable 'date_week_start'
+AR_model: no visible global function definition for 'constructModel'
+AR_model: no visible global function definition for 'cv.BigVAR'
+AR_model: no visible global function definition for 'coef'
+AR_model: no visible global function definition for 'tail'
+AR_model: no visible global function definition for 'predict'
+AR_model: no visible global function definition for 'bind_rows'
+AR_model: no visible global function definition for 'mutate'
+AR_model: no visible binding for global variable 'Actual'
+AR_model: no visible binding for global variable 'Predicted'
+EXTRACT_NONZERO_LASSO_COEFFS: no visible global function definition for
+  'setNames'
+GET_DF_WEIGHTED_SLOPE: no visible global function definition for '%>%'
+GET_DF_WEIGHTED_SLOPE: no visible global function definition for
+  'filter'
+GET_DF_WEIGHTED_SLOPE: no visible binding for global variable
+  'Jurisdiction'
+GET_DF_WEIGHTED_SLOPE: no visible global function definition for
+  'arrange'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for '%>%'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for 'rename'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'rmse'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'mae'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'bias'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'mape'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for 'left_join'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for 'mutate'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'naive_rmse'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'var_rmse'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'naive_mae'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'var_mae'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'naive_bias'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'var_bias'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'naive_mape'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'var_mape'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'Jurisdiction'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'var_rmse_pcent_improve'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'var_mae_pcent_improve'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'var_bias_pcent_improve'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible binding for global
+  variable 'var_mape_pcent_improve'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for 'arrange'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for 'summarise'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for 'across'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for 'everything'
+GET_JUR_BASE_METRICS_MODELS_COMPARED: no visible global function
+  definition for 'bind_rows'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for '%>%'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for 'rename'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'slope_weighted_rmse'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'slope_weighted_mae'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'slope_weighted_bias'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'slope_weighted_mape'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for 'left_join'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for 'mutate'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'naive_w_slope_rmse'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'var_w_slope_rmse'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'naive_w_slope_mae'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'var_w_slope_mae'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'naive_w_slope_bias'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'var_w_slope_bias'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'naive_w_slope_mape'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'var_w_slope_mape'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'Jurisdiction'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'var_rmse_pcent_improve'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'var_mae_pcent_improve'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'var_bias_pcent_improve'
+GET_JUR_METRICS_MODELS_COMPARED: no visible binding for global variable
+  'var_mape_pcent_improve'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for 'arrange'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for 'summarise'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for 'across'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for 'everything'
+GET_JUR_METRICS_MODELS_COMPARED: no visible global function definition
+  for 'bind_rows'
+GET_METRICS: no visible global function definition for '%>%'
+GET_METRICS: no visible binding for global variable 'Jurisdiction'
+GET_METRICS: no visible binding for global variable 'date_week_start'
+GET_METRICS: no visible binding for global variable 'Actual'
+GET_METRICS: no visible binding for global variable 'Predicted'
+GET_METRICS: no visible global function definition for 'filter'
+GET_METRICS_JURISDICTION: no visible global function definition for
+  '%>%'
+GET_METRICS_JURISDICTION: no visible global function definition for
+  'filter'
+GET_METRICS_JURISDICTION: no visible binding for global variable
+  'Jurisdiction'
+GET_METRICS_JURISDICTION: no visible global function definition for
+  'bind_rows'
+GET_METRICS_JURISDICTION: no visible global function definition for
+  'tibble'
+GET_SLOPE_METRICS_JURISDICTION: no visible global function definition
+  for '%>%'
+GET_SLOPE_METRICS_JURISDICTION: no visible global function definition
+  for 'filter'
+GET_SLOPE_METRICS_JURISDICTION: no visible binding for global variable
+  'Jurisdiction'
+GET_SLOPE_METRICS_JURISDICTION: no visible global function definition
+  for 'bind_rows'
+GET_SLOPE_METRICS_JURISDICTION: no visible global function definition
+  for 'tibble'
+GET_SLOPE_WEIGHTED_METRICS: no visible global function definition for
+  '%>%'
+GET_SLOPE_WEIGHTED_METRICS: no visible global function definition for
+  'left_join'
+GET_SLOPE_WEIGHTED_METRICS: no visible binding for global variable
+  'Jurisdiction'
+GET_SLOPE_WEIGHTED_METRICS: no visible binding for global variable
+  'date_week_start'
+GET_SLOPE_WEIGHTED_METRICS: no visible binding for global variable
+  'Actual'
+GET_SLOPE_WEIGHTED_METRICS: no visible binding for global variable
+  'Predicted'
+GET_SLOPE_WEIGHTED_METRICS: no visible binding for global variable
+  'delta_yt'
+GET_SLOPE_WEIGHTED_METRICS: no visible global function definition for
+  'filter'
+GET_SLOPE_WEIGHTED_METRICS_I: no visible global function definition for
+  '%>%'
+GET_SLOPE_WEIGHTED_METRICS_I: no visible global function definition for
+  'left_join'
+GET_SLOPE_WEIGHTED_METRICS_I: no visible binding for global variable
+  'Jurisdiction'
+GET_SLOPE_WEIGHTED_METRICS_I: no visible binding for global variable
+  'date_week_start'
+GET_SLOPE_WEIGHTED_METRICS_I: no visible binding for global variable
+  'Actual'
+GET_SLOPE_WEIGHTED_METRICS_I: no visible binding for global variable
+  'Predicted'
+GET_SLOPE_WEIGHTED_METRICS_I: no visible binding for global variable
+  'delta_yt'
+GET_TS_DATA: no visible global function definition for '%>%'
+GET_TS_DATA: no visible binding for global variable 'Jurisdiction'
+GET_TS_DATA: no visible binding for global variable 'date_week_start'
+GET_TS_DATA: no visible binding for global variable 'Week_Number'
+GET_TS_DATA: no visible binding for global variable 'Cases'
+GET_TS_DATA: no visible global function definition for 'pivot_wider'
+GET_TS_DATA_DIFF: no visible global function definition for '%>%'
+GET_TS_DATA_DIFF: no visible global function definition for 'group_by'
+GET_TS_DATA_DIFF: no visible binding for global variable 'Jurisdiction'
+GET_TS_DATA_DIFF: no visible global function definition for 'mutate'
+GET_TS_DATA_DIFF: no visible binding for global variable 'Cases'
+GET_TS_DATA_DIFF: no visible global function definition for 'ungroup'
+GET_TS_DATA_DIFF: no visible global function definition for 'filter'
+GET_TS_DATA_DIFF: no visible binding for global variable 'Cases_Diff'
+GET_TS_DATA_DIFF: no visible global function definition for
+  'pivot_wider'
+GET_TS_DATA_DIFF: no visible binding for global variable 'Week_Number'
+GET_TS_DATA_DIFF: no visible binding for global variable
+  'date_week_start'
+MATRIX_LASSO_RENAME_COLS: no visible global function definition for
+  'setNames'
+NAIVE_PERSISTANCE_MODEL: no visible global function definition for
+  '%>%'
+NAIVE_PERSISTANCE_MODEL: no visible binding for global variable
+  'Week_Number'
+NAIVE_PERSISTANCE_MODEL: no visible binding for global variable
+  'date_week_start'
+NAIVE_PERSISTANCE_MODEL: no visible global function definition for
+  'tail'
+NAIVE_PERSISTANCE_MODEL: no visible global function definition for
+  'bind_rows'
+NAIVE_PERSISTANCE_MODEL: no visible global function definition for
+  'mutate'
+NAIVE_PERSISTANCE_MODEL: no visible binding for global variable
+  'Actual'
+NAIVE_PERSISTANCE_MODEL: no visible binding for global variable
+  'Predicted'
+NAIVE_PERSISTANCE_MODEL: no visible global function definition for
+  'pivot_wider'
+NAIVE_PERSISTANCE_MODEL: no visible binding for global variable
+  'Jurisdiction'
+NAIVE_PERSISTANCE_MODEL: no visible global function definition for
+  'arrange'
+NB_COEFS: no visible global function definition for 'coef'
+NB_COEFS: no visible global function definition for 'setNames'
+NB_FIT_SERIES: no visible binding for global variable 'sd'
+NB_FORECAST_TWO_STEP_SD: no visible global function definition for
+  'head'
+NB_FORECAST_TWO_STEP_SD: no visible global function definition for
+  'bind_rows'
+NB_FORECAST_TWO_STEP_SD: no visible global function definition for
+  '%>%'
+NB_FORECAST_TWO_STEP_SD: no visible global function definition for
+  'mutate'
+NB_FORECAST_TWO_STEP_SD: no visible binding for global variable
+  'Actual'
+NB_FORECAST_TWO_STEP_SD: no visible binding for global variable
+  'Predicted'
+PLOT_FORECASTS: no visible global function definition for 'setNames'
+PLOT_FORECASTS: no visible global function definition for '%>%'
+PLOT_FORECASTS: no visible global function definition for 'bind_rows'
+PLOT_FORECASTS : <anonymous>: no visible global function definition for
+  '%>%'
+PLOT_FORECASTS : <anonymous>: no visible global function definition for
+  'mutate'
+PLOT_FORECASTS : <anonymous>: no visible binding for global variable
+  'date_week_start'
+PLOT_FORECASTS: no visible binding for global variable 'Week_Number'
+PLOT_FORECASTS: no visible binding for global variable
+  'date_week_start'
+PLOT_FORECASTS: no visible binding for global variable 'Jurisdiction'
+PLOT_FORECASTS: no visible binding for global variable 'Predicted'
+PLOT_FORECASTS: no visible binding for global variable 'Method'
+PLOT_FORECASTS: no visible global function definition for 'rename'
+PLOT_FORECASTS: no visible global function definition for 'mutate'
+PLOT_FORECASTS: no visible binding for global variable 'Actual'
+PLOT_FORECASTS: no visible global function definition for 'distinct'
+PLOT_FORECASTS: no visible global function definition for 'filter'
+PLOT_FORECASTS: no visible binding for global variable 'Source'
+PLOT_FORECASTS: no visible global function definition for 'tail'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  '%>%'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'filter'
+PLOT_FORECASTS : plot_subset: no visible binding for global variable
+  'Jurisdiction_orig'
+PLOT_FORECASTS : plot_subset: no visible binding for global variable
+  'Source'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'ggplot'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'geom_line'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'aes'
+PLOT_FORECASTS : plot_subset: no visible binding for global variable
+  'date_week_start'
+PLOT_FORECASTS : plot_subset: no visible binding for global variable
+  'Cases'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'geom_point'
+PLOT_FORECASTS : plot_subset: no visible binding for global variable
+  'Method'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'scale_color_manual'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'scale_shape_manual'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'scale_linetype_manual'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'guides'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'guide_legend'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'scale_x_date'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'facet_wrap2'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'labs'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'theme_minimal'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'theme'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'element_text'
+PLOT_FORECASTS : plot_subset: no visible global function definition for
+  'unit'
+PLOT_FORECASTS_SUBSET_POPULATION : fmt: no visible global function
+  definition for '%>%'
+PLOT_FORECASTS_SUBSET_POPULATION : fmt: no visible global function
+  definition for 'filter'
+PLOT_FORECASTS_SUBSET_POPULATION : fmt: no visible binding for global
+  variable 'Jurisdiction'
+PLOT_FORECASTS_SUBSET_POPULATION : fmt: no visible global function
+  definition for 'mutate'
+PLOT_FORECASTS_SUBSET_POPULATION : fmt: no visible binding for global
+  variable 'date_week_start'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for '%>%'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'distinct'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible binding for global
+  variable 'Week_Number'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible binding for global
+  variable 'date_week_start'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible binding for global
+  variable 'Actual'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'rename'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'bind_rows'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible binding for global
+  variable 'Method'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible binding for global
+  variable 'Predicted'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'mutate'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'tail'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'ggplot'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'geom_line'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'aes'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible binding for global
+  variable 'Cases'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'geom_point'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'scale_color_manual'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'scale_shape_manual'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'scale_linetype_manual'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'guides'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'guide_legend'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'scale_x_date'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'labs'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'theme_minimal'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'theme'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'element_text'
+PLOT_FORECASTS_SUBSET_POPULATION: no visible global function definition
+  for 'unit'
+PLOT_WEEKLY_CASES: no visible global function definition for '%>%'
+PLOT_WEEKLY_CASES: no visible global function definition for 'filter'
+PLOT_WEEKLY_CASES: no visible binding for global variable
+  'Jurisdiction'
+PLOT_WEEKLY_CASES: no visible global function definition for 'mutate'
+PLOT_WEEKLY_CASES: no visible binding for global variable
+  'date_week_start'
+PLOT_WEEKLY_CASES: no visible global function definition for 'arrange'
+PLOT_WEEKLY_CASES: no visible global function definition for 'distinct'
+PLOT_WEEKLY_CASES: no visible global function definition for 'pull'
+PLOT_WEEKLY_CASES: no visible global function definition for 'tail'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for '%>%'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'filter'
+PLOT_WEEKLY_CASES : plot_subset: no visible binding for global variable
+  'Jurisdiction_orig'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'ggplot'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'aes'
+PLOT_WEEKLY_CASES : plot_subset: no visible binding for global variable
+  'date_week_start'
+PLOT_WEEKLY_CASES : plot_subset: no visible binding for global variable
+  'Cases'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'geom_line'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'geom_point'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'scale_x_date'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'facet_wrap2'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'labs'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'theme_minimal'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'theme'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'element_text'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'element_blank'
+PLOT_WEEKLY_CASES : plot_subset: no visible global function definition
+  for 'unit'
+Plot_final_models: no visible global function definition for
+  'PLOT_FORECASTS_SINGLE_JURISDICITON'
+RUN_VAR: no visible global function definition for '%>%'
+RUN_VAR: no visible global function definition for 'filter'
+RUN_VAR: no visible binding for global variable 'Jurisdiction'
+RUN_VAR: no visible global function definition for 'left_join'
+RUN_VAR: no visible global function definition for 'mutate'
+RUN_VAR: no visible binding for global variable 'Model'
+RUN_VAR: no visible global function definition for 'everything'
+RUN_VAR: no visible global function definition for
+  'PLOT_FORECASTS_SINGLE_JURISDICITON'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  '%>%'
+VAR_LASSO_FORECAST_TWO_STEP: no visible binding for global variable
+  'Week_Number'
+VAR_LASSO_FORECAST_TWO_STEP: no visible binding for global variable
+  'date_week_start'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'constructModel'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'cv.BigVAR'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'coef'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'tail'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'predict'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'bind_rows'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'head'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'mutate'
+VAR_LASSO_FORECAST_TWO_STEP: no visible binding for global variable
+  'Actual'
+VAR_LASSO_FORECAST_TWO_STEP: no visible binding for global variable
+  'Predicted'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'pivot_wider'
+VAR_LASSO_FORECAST_TWO_STEP: no visible binding for global variable
+  'Jurisdiction'
+VAR_LASSO_FORECAST_TWO_STEP: no visible global function definition for
+  'arrange'
+fit_nb: no visible global function definition for 'glmregNB'
+get_train_test_data: no visible global function definition for '%>%'
+get_train_test_data: no visible global function definition for 'filter'
+get_train_test_data: no visible binding for global variable
+  'Week_Number'
+pct_improve_vs_var: no visible global function definition for '%>%'
+pct_improve_vs_var: no visible global function definition for 'filter'
+pct_improve_vs_var: no visible binding for global variable 'Model'
+pct_improve_vs_var: no visible global function definition for
+  'transmute'
+pct_improve_vs_var: no visible global function definition for 'across'
+pct_improve_vs_var: no visible global function definition for 'all_of'
+print_split_check: no visible global function definition for '%>%'
+print_split_check: no visible global function definition for 'filter'
+print_split_check: no visible binding for global variable
+  'Jurisdiction'
+run_ARIMA_model: no visible global function definition for '%>%'
+run_ARIMA_model: no visible global function definition for 'filter'
+run_ARIMA_model: no visible binding for global variable 'Jurisdiction'
+run_ARIMA_model: no visible global function definition for 'bind_rows'
+run_ARIMA_model : build_jur_metrics: no visible global function
+  definition for '%>%'
+run_ARIMA_model : build_jur_metrics: no visible global function
+  definition for 'left_join'
+run_ARIMA_model : build_jur_metrics: no visible global function
+  definition for 'mutate'
+run_ARIMA_model: no visible binding for global variable 'Model'
+run_ARIMA_model: no visible global function definition for 'everything'
+run_ARIMA_model: no visible global function definition for 'group_by'
+run_ARIMA_model: no visible global function definition for 'summarise'
+run_ARIMA_model: no visible global function definition for 'across'
+run_ARIMA_model: no visible global function definition for 'where'
+run_AR_model: no visible global function definition for '%>%'
+run_AR_model: no visible global function definition for 'filter'
+run_AR_model: no visible binding for global variable 'Jurisdiction'
+run_AR_model: no visible global function definition for 'bind_rows'
+run_AR_model : build_jur_metrics: no visible global function definition
+  for '%>%'
+run_AR_model : build_jur_metrics: no visible global function definition
+  for 'left_join'
+run_AR_model : build_jur_metrics: no visible global function definition
+  for 'mutate'
+run_AR_model: no visible binding for global variable 'Model'
+run_AR_model: no visible global function definition for 'everything'
+run_AR_model: no visible global function definition for 'group_by'
+run_AR_model: no visible global function definition for 'summarise'
+run_AR_model: no visible global function definition for 'across'
+run_AR_model: no visible global function definition for 'where'
+run_naive_model: no visible global function definition for '%>%'
+run_naive_model: no visible global function definition for 'filter'
+run_naive_model: no visible binding for global variable 'Jurisdiction'
+run_naive_model : build_jur_metrics: no visible global function
+  definition for '%>%'
+run_naive_model : build_jur_metrics: no visible global function
+  definition for 'left_join'
+run_naive_model : build_jur_metrics: no visible global function
+  definition for 'mutate'
+run_naive_model: no visible binding for global variable 'Model'
+run_naive_model: no visible global function definition for 'everything'
+run_naive_model: no visible global function definition for 'group_by'
+run_naive_model: no visible global function definition for 'summarise'
+run_naive_model: no visible global function definition for 'across'
+run_naive_model: no visible global function definition for 'where'
+run_nb_sd: no visible global function definition for '%>%'
+run_nb_sd: no visible global function definition for 'filter'
+run_nb_sd: no visible binding for global variable 'Jurisdiction'
+run_nb_sd: no visible global function definition for 'left_join'
+run_nb_sd: no visible global function definition for 'mutate'
+run_var_sd: no visible global function definition for '%>%'
+run_var_sd: no visible global function definition for 'filter'
+run_var_sd: no visible binding for global variable 'Jurisdiction'
+run_var_sd: no visible binding for global variable 'Response'
+Undefined global functions or variables:
+  %>% Actual Cases Cases_Diff Jurisdiction Jurisdiction_orig Method
+  Model PLOT_FORECASTS_SINGLE_JURISDICITON Predicted Response Source
+  Week_Number across aes all_of arrange auto.arima bias bind_rows coef
+  constructModel cv.BigVAR date_week_start delta_yt distinct
+  element_blank element_text everything facet_wrap2 filter forecast
+  geom_line geom_point ggplot glmregNB group_by guide_legend guides
+  head labs left_join mae mape mutate naive_bias naive_mae naive_mape
+  naive_rmse naive_w_slope_bias naive_w_slope_mae naive_w_slope_mape
+  naive_w_slope_rmse pivot_wider predict pull rename rmse
+  scale_color_manual scale_linetype_manual scale_shape_manual
+  scale_x_date sd setNames slope_weighted_bias slope_weighted_mae
+  slope_weighted_mape slope_weighted_rmse summarise tail theme
+  theme_minimal tibble transmute ungroup unit var_bias
+  var_bias_pcent_improve var_mae var_mae_pcent_improve var_mape
+  var_mape_pcent_improve var_rmse var_rmse_pcent_improve
+  var_w_slope_bias var_w_slope_mae var_w_slope_mape var_w_slope_rmse
+  where
+Consider adding
+  importFrom("stats", "coef", "filter", "predict", "sd", "setNames")
+  importFrom("utils", "head", "tail")
+to your NAMESPACE file.
+* checking for missing documentation entries ... WARNING
+Undocumented code objects:
+  'ARIMA_model' 'AR_model' 'EXTRACT_NONZERO_LASSO_COEFFS'
+  'GET_DF_WEIGHTED_SLOPE' 'GET_JUR_BASE_METRICS_MODELS_COMPARED'
+  'GET_JUR_LABELS' 'GET_JUR_METRICS_MODELS_COMPARED' 'GET_METRICS'
+  'GET_METRICS_JURISDICTION' 'GET_SLOPE_METRICS_JURISDICTION'
+  'GET_SLOPE_WEIGHTED_IMPROVEMENT' 'GET_SLOPE_WEIGHTED_METRICS'
+  'GET_SLOPE_WEIGHTED_METRICS_I' 'GET_TS_DATA' 'GET_TS_DATA_DIFF'
+  'MATRIX_LASSO_RENAME_COLS' 'NAIVE_PERSISTANCE_MODEL' 'NB_COEFS'
+  'NB_FIT_SERIES' 'NB_FORECAST_TWO_STEP_SD' 'NB_LAGS' 'NB_LAGS_NEXT'
+  'NB_PREDICT' 'PLOT_FORECASTS' 'PLOT_FORECASTS_SUBSET_POPULATION'
+  'PLOT_WEEKLY_CASES' 'Plot_final_models' 'RUN_VAR'
+  'VAR_LASSO_FORECAST_TWO_STEP' 'check_same_weeks' 'fit_nb'
+  'get_train_test_data' 'pct_improve_vs_var' 'print_split_check'
+  'run_ARIMA_model' 'run_AR_model' 'run_naive_model' 'run_nb_sd'
+  'run_var_sd'
+All user-level objects in a package should have documentation entries.
+See chapter 'Writing R documentation files' in the 'Writing R
+Extensions' manual.
+* checking examples ... NONE
+* checking PDF version of manual ... WARNING
+LaTeX errors when creating PDF version.
+This typically indicates Rd problems.
+* checking PDF version of manual without index ... ERROR
+Re-running with no redirection of stdout/stderr.
+* DONE
+Status: 1 ERROR, 2 WARNINGs, 3 NOTEs

@@ -1,21 +1,32 @@
-#DATA PROCESSING
+#*****************************************
+# DATA PROCESSING FUNCTIONS
+#
+# Purpose
+#   Helpers that reshape the weekly Mpox case data into the time x jurisdiction
+#   format used by the forecasting models, and split it into training and
+#   future (test) periods.
+#
+# Functions
+#   GET_TS_DATA()         : long data (Jurisdiction, date_week_start,
+#                           Week_Number, Cases) to wide time-series format,
+#                           one row per week and one column per jurisdiction.
+#                           Uses the Cases column as given (raw weekly counts;
+#                           no smoothing or differencing is applied here).
+#   get_train_test_data() : splits the data by Week_Number. Weeks up to and
+#                           including TRAIN_WEEK form the training data and
+#                           later weeks the future data (2024 test period).
+#                           The forecasting loops add future weeks to the
+#                           training set one at a time, only after the origin
+#                           reaches them, so no future data enter a fit.
+#   GET_TS_DATA_DIFF()    : first differences by jurisdiction in wide format.
+#                           NOT used by the forecasting pipeline (the model
+#                           functions difference the series themselves).
+#
+# Needs
+#   Packages: dplyr, tidyr
+#   Input columns: Jurisdiction, date_week_start, Week_Number, Cases
+#*****************************************
 
-GET_SMOOTH_DATA <- function(data_mpox, ROLL_WINDOW){
-  
-  print(paste0('Roll window size: ', ROLL_WINDOW))
-  df_smooth <- data_mpox %>%
-    group_by(Jurisdiction) %>%
-    mutate(
-      Cases = rollmean(Cases, k = ROLL_WINDOW, fill = NA, align = "right") 
-    ) %>%
-    ungroup() %>%
-    filter(!is.na(Cases))
-  
-  return(df_smooth)
-}
-
-#*******************
-#TIME SERIES FORMATTING
 GET_TS_DATA <- function(data_mpox) {
   
   'GET DATA IN TIME-SERIES FORMAT; TIME X JURISDICTION'
@@ -50,8 +61,6 @@ GET_TS_DATA_DIFF <- function(data_mpox) {
   
   return(data_diff)
 }
-
-#MODEL FITTING - SPLIT DATA
 
 get_train_test_data <- function (data_mpox_model, TRAIN_WEEK){
   
