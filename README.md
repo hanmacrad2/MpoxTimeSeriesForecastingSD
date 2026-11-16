@@ -107,7 +107,7 @@ Always pass `lambda = 0.1` and the lag arguments explicitly. Some function defau
 
 ## Data
 
-**Source.** Weekly Mpox case counts by U.S. jurisdiction from the CDC National Surveillance System, 1 January 2023 to 24 November 2024 (the most recent data available). Data are used as released, at the geographic level at which each jurisdiction reports (state, county or city), with no aggregation or adjustment. New York State is analyzed excluding New York City.
+**Source.** Weekly Mpox case counts by U.S. jurisdiction from the CDC National Surveillance System, 1 January 2023 to 17 November 2024 (the most recent data available). Data are used as released, at the geographic level at which each jurisdiction reports (state, county or city), with no aggregation or adjustment. New York State is analyzed excluding New York City.
 
 **Availability.** 
 
