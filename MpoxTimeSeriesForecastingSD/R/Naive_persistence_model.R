@@ -8,9 +8,7 @@
 #
 # Method (Methods Sections 4.5.5 and 4.7.2)
 #   At each forecast origin T (training data end at week T), the forecast for
-#   week T + 2 is the mean of the last `window` OBSERVED weeks. The paper uses
-#   window = 1, which is the persistence forecast (the count observed at week
-#   T). Larger windows give a moving average and are not used in the paper.
+#   week T + 2 is the count observed at week T (the persistence forecast).
 #   Only observed counts enter the forecast, never earlier forecasts. The
 #   origin then advances one week and the newly observed count is added.
 #   Raw weekly counts are used (no smoothing), and no setting depends on the
@@ -31,7 +29,7 @@
 #*****************************************************************************
 
 NAIVE_PERSISTANCE_MODEL <- function(train_data_ts, future_data_ts, future_real_ts,
-                                  n_step_ahead = 2, window = 1) {
+                                    n_step_ahead = 2) {
   
   'Naive (persistence) forecast: the last observed weekly count is carried forward n_step_ahead weeks.'
   week_number_forecast <- future_data_ts$Week_Number
@@ -50,8 +48,8 @@ NAIVE_PERSISTANCE_MODEL <- function(train_data_ts, future_data_ts, future_real_t
     
     print(paste0('week_t: ', week_t))
     
-    # Mean of the last `window` OBSERVED weeks at the forecast origin
-    forecast_level <- as.numeric(colMeans(tail(train_data_ts, window)))
+    # Last OBSERVED week at the forecast origin
+    forecast_level <- as.numeric(unlist(tail(train_data_ts, 1)))
     
     #STEP AHEAD: Actual values at t + n
     actual_values <- as.numeric(future_real_ts[week_t + (n_step_ahead - 1), ])
@@ -90,8 +88,8 @@ NAIVE_PERSISTANCE_MODEL <- function(train_data_ts, future_data_ts, future_real_t
 # Wrapper (same pattern as run_AR_model / run_ARIMA_model; no ROLL_WINDOW argument)
 # =============================================================================
 run_naive_model <- function(data_mpox, TRAIN_WEEK, jurs_selection,
-                            window = 4, n_step_ahead = 2,
-                            model_label = "4-week moving average") {
+                            n_step_ahead = 2,
+                            model_label = "Naive persistence") {
   
   data_model <- data_mpox %>% filter(Jurisdiction %in% jurs_selection)   # raw counts
   split      <- get_train_test_data(data_model, TRAIN_WEEK)
@@ -99,7 +97,7 @@ run_naive_model <- function(data_mpox, TRAIN_WEEK, jurs_selection,
   future_ts  <- GET_TS_DATA(split$future_data)
   
   res <- NAIVE_PERSISTANCE_MODEL(train_ts, future_ts, future_ts,
-                               n_step_ahead = n_step_ahead, window = window)
+                                 n_step_ahead = n_step_ahead)
   forecasts_naive <- res$df_pred_results %>% filter(Jurisdiction %in% jurs_selection)
   
   df_slope <- GET_DF_WEIGHTED_SLOPE(data_model, jurs_selection)
