@@ -142,17 +142,16 @@ Understanding these definitions is essential for interpreting the lag structure 
 | R version | R version 4.6.1 (2026-06-24 ucrt) |
 | Operating system | Platform: x86_64-w64-mingw32/x64
 Running under: Windows 11 x64 (build 26200) |
-| Package versions | See `sessionInfo.txt` in this repository [CONFIRM: generate it, see below]. Our own package is version 0.1.0. |
+| Package versions |  Our own package is version 0.1.0. |
 | Random seed | No random number generation is used in the forecasting. All models are fitted at a fixed penalty, so results are deterministic. |
-| Training period | January to December 2023 (`TRAIN_WEEK = 84`, confirmed with `print_split_check()`) |
-| Evaluation | 45 rolling two-week-ahead forecasts, January to November 2024 (weeks 86 to 130) |
+| Training period | January to December 2023 (Ending on `TRAIN_WEEK = 84`, confirmed with `print_split_check()`) |
+| Evaluation | 45 rolling two-week-ahead forecasts, January to November 2024 (two week ahead forecasts so weeks 86 to 130) |
 | VAR-Lasso | `lambda = 0.1`, maximum 25 weekly lags, SDC plus ten predictor jurisdictions, first-differenced counts |
 | AR-Lasso | `lambda = 0.1`, `n_lags_ar = 8`, first-differenced counts |
 | Negative binomial AR-Lasso | `lambda = 0.1`, `n_lags = 8`, raw counts with log(1 + count) predictors |
 | ARIMA | `auto.arima`, non-seasonal, stepwise, AICc, `max_p = 8` |
 | Naive persistence | Last observed weekly count carried forward |
-| Edge handling | No smoothing is applied, so no weeks are dropped at the start or end of the series. First differencing uses up the first week of each training window, and the lag structure uses the first p weeks of each window as predictors. |
-| Forecast design | Expanding window. At each origin the model is fitted to all data up to that week, the one-week-ahead forecast is appended, the model is refitted, and the two-week-ahead forecast is kept (negative forecasts set to zero for the differenced models and ARIMA). |
+| Forecast design | Expanding window. At each origin the model is fitted to all data up to that week, the one-week-ahead forecast is appended, the model is refitted, and the two-week-ahead forecast is kept |
 
 To record package versions, run once after a full run:
 
@@ -164,7 +163,6 @@ writeLines(capture.output(sessionInfo()), "sessionInfo.txt")
 
 - The VAR-Lasso 25-week lag window was informed by phylogeographic evidence specific to SDC. Applying the approach to other jurisdictions would need comparable evidence.
 - One test year and one forecast horizon (two weeks ahead).
-- The penalty is on each package's own scale, so values are not comparable across models.
 
 ## Citation and contact
 
