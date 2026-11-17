@@ -103,7 +103,7 @@ Always pass `lambda = 0.1` and the lag arguments explicitly. Some function defau
 | `11_Sensitivity_analysis_penalised_models_table_S6.R` | Table S6 (VAR-Lasso and AR-Lasso columns) |
 | `Population_adjusted_rates/01_Population_denominators_and_rates_table_S8.R` | Table S8 (population denominators). Builds the rate data used by the next script. |
 | `Population_adjusted_rates/02_Run_rate_models_table_S9_fig_S2.R` | Table S9, Figure S2 (VAR-Lasso and AR-Lasso fitted to incidence rates). Run after `01_` in the same folder. |
-| `2_Run_forecast_models.R` (repository root) | Table 2, Figure 5, Table S7 (unweighted metrics) |
+| `2_Run_forecast_models.R` (repository root) | Table 2, Figure 5, Table S7 |
 
 ## Data
 
