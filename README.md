@@ -84,7 +84,7 @@ comparison <- bind_rows(var_out$overall, nb_out$overall, ar_out$overall,
                         arima_out$overall, naive_out$overall)
 ```
 
-Always pass `lambda = 0.1` and the lag arguments explicitly. Some function defaults (`lambda = 0.05`, `n_lags = 5`) are not the settings used in the paper.
+Always pass `lambda = 0.1` and the lag arguments explicitly. 
 
 ## Where each result comes from
 
