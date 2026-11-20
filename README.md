@@ -78,7 +78,7 @@ ar_out    <- run_AR_model(data_year, TRAIN_WEEK = TRAIN_WEEK, jurs_selection = "
                           n_lags_ar = 8, lambda = lambda)
 arima_out <- run_ARIMA_model(data_year, TRAIN_WEEK = TRAIN_WEEK, jurs_selection = "SanDiego",
                              max_p = 8)
-naive_out <- run_naive_model(data_year, TRAIN_WEEK, "SanDiego", window = 1)
+naive_out <- run_naive_model(data_year, TRAIN_WEEK, "SanDiego")
 
 comparison <- bind_rows(var_out$overall, nb_out$overall, ar_out$overall,
                         arima_out$overall, naive_out$overall)
@@ -107,7 +107,7 @@ Always pass `lambda = 0.1` and the lag arguments explicitly.
 
 ## Data
 
-**Source.** Weekly Mpox case counts by U.S. jurisdiction from the CDC National Surveillance System, 1 January 2023 to 17 November 2024 (the most recent data available). Data are used as released, at the geographic level at which each jurisdiction reports (state, county or city), with no aggregation or adjustment. New York State is analyzed excluding New York City.
+**Source.** Weekly Mpox case counts by U.S. jurisdiction from the CDC National Surveillance System, 1 January 2023 to 17 November 2024 (the most recent data available). Data are used as released, at the geographic level at which each jurisdiction reports (state, county or city), with no aggregation or adjustment. New York State is analyzed excluding New York City. Data is not provided in this repository.
 
 **Availability.** 
 
@@ -130,10 +130,9 @@ Understanding these definitions is essential for interpreting the lag structure 
 | `Jurisdiction` | Reporting jurisdiction. The model uses 11: NewYorkCity, LA, Georgia, Illinois, NewJersey, SanDiego, Philadelphia, Colorado, Massachusetts, Ohio, NewYork. |
 | `Year` | Calendar year of the week. The models use `Year >= 2023`. |
 | `date_week_start` | First day of the week for the case date defined above. |
-| `Week_Number` | Running week index within the full series. The train and test split is made on this column. |
+| `Week_Number` | Running week index within the full series (Week 1 began in June 2022; though 2022 data is not using in model training). The train and test split is made on this column. |
 | `Cases` | Number of Mpox cases in that jurisdiction and week (raw, not smoothed). |
 
-**Notes.** Counts for 2024 onward are preliminary and subject to change. Data for the most recent month may be incomplete because of reporting delays.
 
 ## Reproducibility
 
@@ -145,13 +144,13 @@ Running under: Windows 11 x64 (build 26200) |
 | Package versions |  Our own package is version 0.1.0. |
 | Random seed | No random number generation is used in the forecasting. All models are fitted at a fixed penalty, so results are deterministic. |
 | Training period | January to December 2023 (Ending on `TRAIN_WEEK = 84`, confirmed with `print_split_check()`) |
-| Evaluation | 45 rolling two-week-ahead forecasts, January to November 2024 (two week ahead forecasts so weeks 86 to 130) |
+| Evaluation | 45 rolling two-week-ahead forecasts, January to November 2024 (two week ahead forecasts; weeks 86 to 130) |
 | VAR-Lasso | `lambda = 0.1`, maximum 25 weekly lags, SDC plus ten predictor jurisdictions, first-differenced counts |
 | AR-Lasso | `lambda = 0.1`, `n_lags_ar = 8`, first-differenced counts |
 | Negative binomial AR-Lasso | `lambda = 0.1`, `n_lags = 8`, raw counts with log(1 + count) predictors |
 | ARIMA | `auto.arima`, non-seasonal, stepwise, AICc, `max_p = 8` |
 | Naive persistence | Last observed weekly count carried forward |
-| Forecast design | Expanding window. At each origin the model is fitted to all data up to that week, the one-week-ahead forecast is appended, the model is refitted, and the two-week-ahead forecast is kept |
+| Forecast design | Expanding window. At each origin the model is fitted to all data up to that week, the one-week-ahead forecast is appended, the model is refitted, and the two-week-ahead forecast is used as the forecast |
 
 To record package versions, run once after a full run:
 
@@ -162,7 +161,7 @@ writeLines(capture.output(sessionInfo()), "sessionInfo.txt")
 ## Limitations
 
 - The VAR-Lasso 25-week lag window was informed by phylogeographic evidence specific to SDC. Applying the approach to other jurisdictions would need comparable evidence.
-- One test year and one forecast horizon (two weeks ahead).
+- One test year and one forecast horizon (two weeks ahead forecasts for January-November 2024).
 
 ## Citation and contact
 
