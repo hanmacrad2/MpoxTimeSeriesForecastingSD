@@ -50,7 +50,7 @@ MpoxTimeSeriesForecastingSD/            <- repository root (this folder)
    ```
    Or from the command line, in the repository root: `R CMD INSTALL MpoxTimeSeriesForecastingSD`.
 3. **Load the packages.** `source("libs_required.R")` installs any missing dependencies, loads them, and loads our package last.
-4. **Get the data.** Run `1_get_data_local.R` after setting `FOLDER` and `DATA_FOLDER` to your local paths. See **Data** below. 
+4. **Get the data.** Run `01_get_data_and_plot.R ` after setting `FOLDER` and `DATA_FOLDER` to your local paths. See **Data** below. 
 5. **Run the models.** `2_Run_forecast_models.R` fits the VAR-Lasso and the four comparison models over the 45 rolling forecasts and produces the comparison table (Table 2) and forecast figure (Figure 5).
 6. **Reproduce a specific table or figure.** Run the matching script in `Analysis/` (table below). Run step 5 first, because the scripts read its results.
 
