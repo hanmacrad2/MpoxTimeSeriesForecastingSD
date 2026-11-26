@@ -125,9 +125,9 @@ Always pass `lambda = 0.1` and the lag arguments explicitly.
 
 ## Data
 
-**Source.** Weekly Mpox case counts by U.S. jurisdiction from the CDC National Surveillance System, 1 January 2023 to 17 November 2024 (the most recent data available). Data are used as released, at the geographic level at which each jurisdiction reports (state, county or city), with no aggregation or adjustment. New York State is analyzed excluding New York City. The CDC data are not provided in this repository; synthetic mock data in the same format are in `mock_data/`.
+**Source.** Weekly Mpox case counts by U.S. jurisdiction from the CDC National Surveillance System, 1 January 2023 to 17 November 2024 (the most recent data available). Data are used as released, at the geographic level at which each jurisdiction reports (state, county or city), with no aggregation or adjustment. New York State is analyzed excluding New York City. 
 
-**Availability.** [Say who can obtain the CDC data and how, for example through the CDC source in the References or on request to the authors.]
+**Availability.** The CDC data are not provided in this repository; synthetic mock data in the same format are in `mock_data/`.
 
 **Genomic data (phylogeographic analysis).** The phylogeographic analysis (TreeTime, BEAST X) was run separately and is not part of this repository. The MPXV genomes are available through GISAID (EPI_SET_260729rw, https://doi.org/10.55876/gis8.260729rw), and the NCBI accessions are listed in `genomic_data/ncbi_accessions.txt`. Genomes from New York City were shared under a Data Use Agreement and have since been submitted to NCBI.
 
@@ -139,7 +139,7 @@ Understanding these definitions is essential for interpreting the lag structure 
 
 **Date definition.** Each case is assigned the earliest date available, which is one of: date of illness onset, diagnosis date, positive laboratory test report date, or date reported to CDC. This is an event date when onset or diagnosis is available and otherwise a reporting date. Weekly counts, and therefore lags, are measured on this date.
 
-**Week definition.** `date_week_start` is the first day of each weekly interval (a Sunday, with one exception: week 32 is dated 2022-12-31 and labelled `53_2022`). Weeks are numbered consecutively in `Week_Number`, and `Week_Year` labels each week with its week of the year and the year. [State the rule used to number the weeks within a year; the 2023 labels start at 1 on 2023-01-08.] One lag is one week, so a lag of 24 weeks is about 5.5 months.
+**Week definition.** `date_week_start` is the first day of each weekly interval (a Sunday, with one exception: week 32 is dated 2022-12-31 and labelled `53_2022`). Weeks are numbered consecutively in `Week_Number`, and `Week_Year` labels each week with its week of the year and the year. One lag is one week, so a lag of 24 weeks is about 5.5 months.
 
 **Variables.**
 
