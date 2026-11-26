@@ -67,7 +67,7 @@ Plot_forecasts_final_models(var_lasso_forecasts, nb_ar_lasso_forecasts, ar_lasso
 var_rmse <- comparison_fitted_models$slope_weighted_rmse[comparison_fitted_models$Model == "VAR-Lasso"]
 var_mae  <- comparison_fitted_models$slope_weighted_mae[comparison_fitted_models$Model == "VAR-Lasso"]
 
-comparison_final %>%
+comparison_fitted_models %>%
   mutate(pct_rmse = round(100 * (slope_weighted_rmse - var_rmse) / slope_weighted_rmse, 2),
          pct_mae  = round(100 * (slope_weighted_mae  - var_mae)  / slope_weighted_mae,  2))
 
