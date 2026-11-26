@@ -6,17 +6,16 @@
 #   jurisdictions used in the analysis (San Diego County plus the candidate
 #   predictor jurisdictions), and plots weekly cases for each.
 #
-# Needs
-#   DATA_FOLDER : folder containing data_mpox.xlsx. Define it in config_local.R
-#                 (not committed to GitHub; see below).
-#   Packages    : loaded from libs_required.R
-#   Function    : PLOT_WEEKLY_CASES() (defined elsewhere in the repository)
+# Data
+#   By default this script reads the SYNTHETIC mock data in mock_data/
+#   (mock_data_mpox.xlsx), so the repository runs without access to the CDC
+#   data. Results from the mock data will not match the paper.
+#   To run on the real CDC data, set DATA_FOLDER to the folder containing
+#   data_mpox.xlsx and file_name to "data_mpox.xlsx" in section 1.
 #
-# Setup
-#   Create a file called config_local.R in the repository folder containing one
-#   line, for example:
-#     DATA_FOLDER <- "C:/path/to/your/data/folder/"
-#   and add config_local.R to .gitignore so the path is not shared.
+# Needs
+#   Packages : loaded from libs_required.R
+#   Function : PLOT_WEEKLY_CASES() (from the MpoxTimeSeriesForecastingSD package)
 #
 # Outputs
 #   data_mpox  : full weekly case data
@@ -26,22 +25,24 @@
 #   outputs/mpox_weekly_cases.png : weekly cases by jurisdiction
 # =============================================================================
 
+
 #**************************************************
-# 0. PACKAGES AND LOCAL SETTINGS
+# 0. PACKAGES
 
 source("libs_required.R")
-
-if (!file.exists("config_local.R")) {
-  stop("Create config_local.R defining DATA_FOLDER ",
-       "(the folder containing data_mpox.xlsx). See the header of this file.")
-}
-source("config_local.R")
 
 
 #**************************************************
 # 1. GET DATA
+# Default: synthetic mock data. For the real CDC data, change these two lines.
 
-file_name <- "data_mpox.xlsx"
+DATA_FOLDER <- "mock_data"
+file_name   <- "mock_data_mpox.xlsx"
+
+if (grepl("mock", file_name)) {
+  message("Running on SYNTHETIC mock data: results will not match the paper.")
+}
+
 data_mpox <- readxl::read_excel(path = file.path(DATA_FOLDER, file_name))
 
 # Keep 2023 onward (2022 is excluded because of the atypical 2022 outbreak)
