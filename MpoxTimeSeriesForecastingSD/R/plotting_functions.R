@@ -226,6 +226,34 @@ PLOT_WEEKLY_CASES <- function(
 # 3. Forecast Plotting functions 
 #*****************************************
 
+Plot_forecasts_final_models <- function(var_output, nb_output, ar_output, arima_output, naive_output, title_plot,
+                              jurisdiction_interest = "SanDiego") {
+  
+  'Draw the main two-week-ahead forecast figure for San Diego County (Figure 5)
+  from the five final model outputs.
+  
+  Args:
+    var_output, nb_output, ar_output, arima_output, naive_output : outputs of
+        the model wrappers (run_var_sd, run_nb_sd, run_AR_model,
+        run_ARIMA_model, and the naive model). Each must contain a forecasts
+        data frame with Week_Number, date_week_start, Jurisdiction, Predicted
+        and Actual.
+    title_plot            : plot title.
+    jurisdiction_interest : not used here (each forecasts data frame is passed
+                            on as it is). Kept so existing calls still work.
+  
+  First checks that the five models forecast the same weeks (warns if not),
+  then calls PLOT_FORECASTS_SINGLE_JURISDICITON(), which is defined elsewhere.
+  Returns whatever that function returns.'
+  
+  #uf <- lapply(univariate_results$forecasts, function(x) x %>% filter(Jurisdiction == jurisdiction_interest))
+  check_same_weeks(list(VAR = var_output$forecasts, AR = ar_output$forecasts, ARIMA = arima_output$forecasts,
+                        NB = nb_output$forecasts, Naive = naive_output$forecasts))
+  PLOT_FORECASTS_SINGLE_JURISDICITON(var_output$forecasts, ar_output$forecasts, arima_output$forecasts,
+                                     nb_output$forecasts, naive_output$forecasts, title_plot)
+}
+
+#PLOT_FORECASTS_SINGLE_JURISDICTION
 PLOT_FORECASTS_SINGLE_JURISDICTION <- function(df_preds_var, df_preds_ar, df_preds_arima,
                                                df_preds_nb, df_preds_naive, title_plot,
                                                point_size = 4.6, line_size = 1.6) {
@@ -297,33 +325,6 @@ PLOT_FORECASTS_SINGLE_JURISDICTION <- function(df_preds_var, df_preds_ar, df_pre
           legend.key.height = unit(0.8, "cm"))
 }
 
-
-Plot_forecasts_final_models <- function(var_output, nb_output, ar_output, arima_output, naive_output, title_plot,
-                              jurisdiction_interest = "SanDiego") {
-  
-  'Draw the main two-week-ahead forecast figure for San Diego County (Figure 5)
-  from the five final model outputs.
-  
-  Args:
-    var_output, nb_output, ar_output, arima_output, naive_output : outputs of
-        the model wrappers (run_var_sd, run_nb_sd, run_AR_model,
-        run_ARIMA_model, and the naive model). Each must contain a forecasts
-        data frame with Week_Number, date_week_start, Jurisdiction, Predicted
-        and Actual.
-    title_plot            : plot title.
-    jurisdiction_interest : not used here (each forecasts data frame is passed
-                            on as it is). Kept so existing calls still work.
-  
-  First checks that the five models forecast the same weeks (warns if not),
-  then calls PLOT_FORECASTS_SINGLE_JURISDICITON(), which is defined elsewhere.
-  Returns whatever that function returns.'
-  
-  #uf <- lapply(univariate_results$forecasts, function(x) x %>% filter(Jurisdiction == jurisdiction_interest))
-  check_same_weeks(list(VAR = var_output$forecasts, AR = ar_output$forecasts, ARIMA = arima_output$forecasts,
-                        NB = nb_output$forecasts, Naive = naive_output$forecasts))
-  PLOT_FORECASTS_SINGLE_JURISDICITON(var_output$forecasts, ar_output$forecasts, arima_output$forecasts,
-                                     nb_output$forecasts, naive_output$forecasts, title_plot)
-}
 
 
 #*****************************************
