@@ -85,7 +85,7 @@ NAIVE_PERSISTANCE_MODEL <- function(train_data_ts, future_data_ts, future_real_t
 }
 
 # =============================================================================
-# Wrapper (same pattern as run_AR_model / run_ARIMA_model; no ROLL_WINDOW argument)
+# Wrapper
 # =============================================================================
 run_naive_model <- function(data_mpox, TRAIN_WEEK, jurs_selection,
                             n_step_ahead = 2,
