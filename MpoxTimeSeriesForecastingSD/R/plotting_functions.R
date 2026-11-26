@@ -249,7 +249,7 @@ Plot_forecasts_final_models <- function(var_output, nb_output, ar_output, arima_
   #uf <- lapply(univariate_results$forecasts, function(x) x %>% filter(Jurisdiction == jurisdiction_interest))
   check_same_weeks(list(VAR = var_output$forecasts, AR = ar_output$forecasts, ARIMA = arima_output$forecasts,
                         NB = nb_output$forecasts, Naive = naive_output$forecasts))
-  PLOT_FORECASTS_SINGLE_JURISDICITON(var_output$forecasts, ar_output$forecasts, arima_output$forecasts,
+  PLOT_FORECASTS_SINGLE_JURISDICTION(var_output$forecasts, ar_output$forecasts, arima_output$forecasts,
                                      nb_output$forecasts, naive_output$forecasts, title_plot)
 }
 
