@@ -47,7 +47,7 @@ ar_lasso_forecasts <- run_AR_model(data_model, TRAIN_WEEK, jurisdiction, n_lags_
 arima_forecasts <- run_ARIMA_model(data_model, 0, TRAIN_WEEK, jurisdiction, max_p = 8)
 
 #5. Naive Persistance model
-naive_forecasts <- run_naive_model(data_model, TRAIN_WEEK, jurisdiction, window = 1,
+naive_forecasts <- run_naive_model(data_model, TRAIN_WEEK, jurisdiction, 
                         model_label = "Naive (persistence)")
 
 
@@ -58,7 +58,7 @@ comparison_fitted_models = bind_rows(var_lasso_forecasts$overall, nb_ar_lasso_fo
 
 #PLOT
 title_plot = 'San Diego County Forecasts, 2024'
-Plot_final_models(var_lasso_forecasts, nb_ar_lasso_forecasts, ar_lasso_forecasts, arima_forecasts,
+Plot_forecasts_final_models(var_lasso_forecasts, nb_ar_lasso_forecasts, ar_lasso_forecasts, arima_forecasts,
                   naive_forecasts, title_plot)
 
 

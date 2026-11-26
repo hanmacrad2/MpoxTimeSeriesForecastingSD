@@ -226,105 +226,79 @@ PLOT_WEEKLY_CASES <- function(
 # 3. FORECAST FIGURES
 #*****************************************
 
-PLOT_FORECASTS <- function(df_preds_var, df_preds_ar, df_preds_arima, df_preds_nb,
-                           df_preds_naive, list_ordered_jur, title_plot,
-                           n_col_plot = 2, two_figures = TRUE,
-                           point_size = 3.8, line_size = 1.45) {
+PLOT_FORECASTS_SINGLE_JURISDICTION <- function(df_preds_var, df_preds_ar, df_preds_arima,
+                                               df_preds_nb, df_preds_naive, title_plot,
+                                               point_size = 4.6, line_size = 1.6) {
   
-  'Plot observed weekly cases (black) and the forecasts of the five models,
-  one panel per jurisdiction. Not used for the paper; kept from the
-  multi-target analysis.
+  'Plot observed weekly cases (black) and the two-week-ahead forecasts of the
+  five models for one jurisdiction. This is the main forecast figure (Figure 5)
+  when called through Plot_final_models().
   
   Args:
     df_preds_var, df_preds_ar, df_preds_arima, df_preds_nb, df_preds_naive :
-                       forecast data frames for the VAR-Lasso, AR-Lasso,
-                       ARIMA, negative binomial AR-Lasso and naive models, each
-                       with columns Week_Number, date_week_start, Jurisdiction,
-                       Predicted and Actual.
-    list_ordered_jur : jurisdictions to plot, in panel order.
-    title_plot       : plot title.
-    n_col_plot       : number of panel columns.
-    two_figures      : TRUE prints the jurisdictions in groups of four, one
-                       figure per group; FALSE returns a single plot.
+                  forecast data frames for the VAR-Lasso, AR-Lasso, ARIMA,
+                  negative binomial AR-Lasso and naive models, for a single
+                  jurisdiction. Each needs the columns date_week_start,
+                  Predicted and Actual.
+    title_plot  : plot title.
     point_size, line_size : marker and line sizes.
   
-  Observed counts are taken from the Actual column of df_preds_var. Method
-  colours, shapes and line types are fixed (see the methods vector below).
+  Observed counts are taken from the Actual column of df_preds_var. A label is
+  shown every fourth week, plus the last week. Method colours, shapes and line
+  types are fixed (see the vectors below).
   
-  Returns a ggplot if two_figures is FALSE. Otherwise prints each figure and
-  returns the list of plots invisibly.'
+  Returns a ggplot.'
   
-  jur_labels <- GET_JUR_LABELS()
+  # Styles, defined once and used for the data, scales and legend
+  methods       <- c("VAR-Lasso", "AR-Lasso", "ARIMA", "Negative-Binomial-AR", "Naive")
+  legend_levels <- c("Reported Cases", methods)
+  cols   <- setNames(c("black", "#0072B2", "#E69F00", "#CC79A7", "#009E73", "#7F7F7F"), legend_levels)
+  shapes <- setNames(c(16, 17, 15, 18, 16, 3), legend_levels)
+  ltypes <- setNames(c("solid", "solid", "dashed", "dotdash", "twodash", "dotted"), legend_levels)
   
-  # Method styles, defined once and used for the data, scales and legend
-  methods <- c("VAR-Lasso", "AR-Lasso", "ARIMA", "Negative-Binomial-AR", "Naive")
-  cols    <- setNames(c("#0072B2", "#E69F00", "#CC79A7", "#009E73", "#7F7F7F"), methods)
-  shapes  <- setNames(c(17, 15, 18, 16, 3), methods)
-  ltypes  <- setNames(c("solid", "dashed", "dotdash", "twodash", "dotted"), methods)
-  
-  # Label each forecast data frame with its method and stack them
+  # Forecasts: label each data frame with its method and stack them
   preds <- list(df_preds_var, df_preds_ar, df_preds_arima, df_preds_nb, df_preds_naive)
-  df_preds_all <- bind_rows(lapply(seq_along(preds), function(i)
-    preds[[i]] %>% mutate(date_week_start = as.Date(date_week_start), Method = methods[i]))) %>%
-    dplyr::select(Week_Number, date_week_start, Jurisdiction, Predicted, Method) %>%
-    rename(Cases = Predicted) %>% mutate(Source = "Predicted")
+  forecasts <- bind_rows(lapply(seq_along(preds), function(i)
+    preds[[i]] %>%
+      mutate(date_week_start = as.Date(date_week_start), Legend = methods[i]) %>%
+      dplyr::select(date_week_start, Cases = Predicted, Legend)))
   
-  # Observed data (one copy, taken from the VAR-Lasso data frame)
-  df_true <- df_preds_var %>%                                  # CHANGED: simpler, same result
-    mutate(date_week_start = as.Date(date_week_start)) %>%
-    dplyr::select(Week_Number, date_week_start, Jurisdiction, Actual) %>%
-    distinct() %>% rename(Cases = Actual) %>% mutate(Source = "True")
+  # Observed counts: one copy, taken from the VAR-Lasso data frame
+  observed <- df_preds_var %>%
+    mutate(date_week_start = as.Date(date_week_start), Legend = "Reported Cases") %>%
+    dplyr::select(date_week_start, Cases = Actual, Legend)
   
-  df_plot <- bind_rows(df_true, df_preds_all) %>%
-    filter(Jurisdiction %in% list_ordered_jur) %>%
-    mutate(Source = factor(Source, levels = c("True", "Predicted")),
-           Jurisdiction_orig = Jurisdiction,
-           Jurisdiction = factor(jur_labels[Jurisdiction], levels = jur_labels[list_ordered_jur]),
-           Method = factor(Method, levels = methods))
+  df_long <- bind_rows(observed, forecasts) %>%
+    mutate(Legend = factor(Legend, levels = legend_levels))
   
   # X axis: a label every fourth week, plus the last week
-  date_seq <- sort(unique(df_plot$date_week_start))
+  date_seq <- sort(unique(df_long$date_week_start))
   x_breaks <- date_seq[seq(1, length(date_seq), by = 4)]
   if (tail(date_seq, 1) != tail(x_breaks, 1)) x_breaks <- c(x_breaks, tail(date_seq, 1))
   
-  plot_subset <- function(subset_jur) {
-    obs  <- df_plot %>% filter(Jurisdiction_orig %in% subset_jur, Source == "True")
-    pred <- df_plot %>% filter(Jurisdiction_orig %in% subset_jur, Source == "Predicted")
-    
-    ggplot() +
-      geom_line(data = obs, aes(date_week_start, Cases), colour = "black", linewidth = line_size) +
-      geom_point(data = obs, aes(date_week_start, Cases), colour = "black", shape = 16, size = point_size) +
-      geom_line(data = pred, aes(date_week_start, Cases, colour = Method, linetype = Method),
-                linewidth = line_size) +
-      geom_point(data = pred, aes(date_week_start, Cases, colour = Method, shape = Method),
-                 size = point_size) +
-      scale_color_manual(name = "", values = cols) +
-      scale_shape_manual(name = "", values = shapes, guide = "none") +
-      scale_linetype_manual(name = "", values = ltypes, guide = "none") +
-      guides(colour = guide_legend(override.aes = list(shape = unname(shapes),
-                                                       linetype = unname(ltypes)))) +
-      scale_x_date(breaks = x_breaks, date_labels = "%m/%d/%y") +
-      facet_wrap2(~Jurisdiction, scales = "free_y", axes = "all", ncol = n_col_plot) +
-      labs(x = "Month", y = "Case counts", title = title_plot) +
-      theme_minimal(base_size = 17) +
-      theme(plot.title = element_text(size = 22, hjust = 0.5),
-            legend.position = "bottom",
-            legend.text = element_text(size = 16), legend.title = element_text(size = 16),
-            axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
-            axis.title.y = element_text(size = 18), strip.text = element_text(size = 19),
-            legend.key.size = unit(1.2, "lines"), legend.key.width = unit(2, "cm"),
-            legend.key.height = unit(0.8, "cm"))
-  }
-  
-  if (!two_figures) return(plot_subset(list_ordered_jur))
-  
-  jur_chunks <- split(list_ordered_jur, ceiling(seq_along(list_ordered_jur) / 4))
-  plot_list  <- lapply(jur_chunks, function(chunk) print(plot_subset(chunk)))
-  invisible(plot_list)
+  ggplot(df_long, aes(x = date_week_start, y = Cases,
+                      colour = Legend, linetype = Legend, shape = Legend)) +
+    geom_line(linewidth = line_size) +
+    geom_point(size = point_size) +
+    scale_color_manual(name = "", values = cols) +
+    scale_linetype_manual(name = "", values = ltypes) +
+    scale_shape_manual(name = "", values = shapes) +
+    scale_x_date(breaks = x_breaks, date_labels = "%m/%d/%y") +
+    labs(x = "Date (week start date of reported cases)", y = "Case counts",
+         title = title_plot) +
+    theme_minimal(base_size = 17) +
+    theme(plot.title = element_text(size = 25, hjust = 0.5),
+          legend.position = "bottom",
+          legend.text = element_text(size = 20), legend.title = element_text(size = 17),
+          axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
+          axis.text.y = element_text(size = 18),
+          axis.title.x = element_text(size = 19), axis.title.y = element_text(size = 19),
+          legend.key.size = unit(1.2, "lines"), legend.key.width = unit(2, "cm"),
+          legend.key.height = unit(0.8, "cm"))
 }
 
 
-Plot_final_models <- function(var_output, nb_output, ar_output, arima_output, naive_output, title_plot,
+Plot_forecasts_final_models <- function(var_output, nb_output, ar_output, arima_output, naive_output, title_plot,
                               jurisdiction_interest = "SanDiego") {
   
   'Draw the main two-week-ahead forecast figure for San Diego County (Figure 5)
