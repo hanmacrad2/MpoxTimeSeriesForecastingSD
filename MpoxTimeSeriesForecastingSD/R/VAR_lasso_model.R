@@ -35,7 +35,7 @@
 #   Packages: dplyr, tidyr, BigVAR, reshape2
 #   Functions defined elsewhere: get_train_test_data(), GET_TS_DATA(),
 #   GET_METRICS(), GET_DF_WEIGHTED_SLOPE(), GET_METRICS_JURISDICTION(),
-#   GET_SLOPE_METRICS_JURISDICTION(), PLOT_FORECASTS_SINGLE_JURISDICITON()
+#   GET_SLOPE_METRICS_JURISDICTION()
 #   list_jur must include SanDiego (the response) and the predictors.
 #**************************************************************************************
 
@@ -176,11 +176,10 @@ RUN_VAR <- function(jurisdiction_interest, data_mpox, TRAIN_WEEK,
   
   Filters the data to list_jur, splits it into training (2023) and evaluation
   (2024) weeks, runs VAR_LASSO_FORECAST_TWO_STEP, computes pooled,
-  per-jurisdiction and slope-weighted error metrics, and plots the forecasts
-  for jurisdiction_interest.
+  per-jurisdiction and slope-weighted error metrics
   
   Args:
-    jurisdiction_interest : jurisdiction to plot (e.g. SanDiego).
+    jurisdiction_interest : jurisdiction (e.g. SanDiego).
     data_mpox             : long data frame, one row per jurisdiction-week
                             (needs a Jurisdiction column).
     TRAIN_WEEK            : index passed to get_train_test_data() that
@@ -196,7 +195,7 @@ RUN_VAR <- function(jurisdiction_interest, data_mpox, TRAIN_WEEK,
     jur_level_metrics : per-jurisdiction metrics (unweighted and
                         slope-weighted), with Model = VAR-Lasso.
   
-  Side effects: prints the pooled metrics and draws a forecast plot.'
+  Side effects: prints the pooled metrics'
   
   #-------------------------------------------------
   # PREPARE DATA
@@ -232,14 +231,6 @@ RUN_VAR <- function(jurisdiction_interest, data_mpox, TRAIN_WEEK,
   jur_level_metrics <- left_join(jur_metrics_var, jur_slope_var, by = "Jurisdiction") %>%
     mutate(Model = "VAR-Lasso") %>%
     dplyr::select(Jurisdiction, Model, everything())
-  #PLOT_CASES_FORECASTS(var_forecasts, var_forecasts, var_forecasts, var_forecasts, var_forecasts, list_jur, title_plot)
-  
-  #PLOT SAN DIEGO
-  title_plot = paste0(jurisdiction_interest, ' VAR-Lasso forecasts, lambda: ', lambda)
-  jur_var_forecasts = var_forecasts %>% filter(Jurisdiction == jurisdiction_interest)
-  PLOT_FORECASTS_SINGLE_JURISDICITON(jur_var_forecasts, jur_var_forecasts, jur_var_forecasts,
-                                     jur_var_forecasts,
-                                     jur_var_forecasts, title_plot)
   
   return(list(
     results_var = results_var,             # original model output object ($df_pred_results etc.)
