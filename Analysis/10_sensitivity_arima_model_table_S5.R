@@ -142,6 +142,4 @@ for (v in c("p", "d", "q")) {
   print(table(arima_out$orders %>% filter(Fit == "observed") %>% pull(v)))
 }
 
-#write.csv(order_table(arima_out$orders, "observed"), "stability_ARIMA_orders_observed.csv", row.names = FALSE)
-#write.csv(order_table(arima_out$orders, "extended"), "stability_ARIMA_orders_extended.csv", row.names = FALSE)
 

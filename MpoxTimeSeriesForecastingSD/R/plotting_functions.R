@@ -223,7 +223,7 @@ PLOT_WEEKLY_CASES <- function(
 
 
 #*****************************************
-# 3. FORECAST FIGURES
+# 3. Forecast Plotting functions 
 #*****************************************
 
 PLOT_FORECASTS_SINGLE_JURISDICTION <- function(df_preds_var, df_preds_ar, df_preds_arima,

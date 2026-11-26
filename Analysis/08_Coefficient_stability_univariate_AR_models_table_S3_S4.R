@@ -1,23 +1,26 @@
 library(dplyr)
 
-# Run first (as you already do):
-# nb_out   <- run_nb_sd(data_year, 84, n_lags = 8, lambda = 0.1)
-# ar_model <- run_AR_model(data_year, 0, TRAIN_WEEK, "SanDiego", n_lags_ar = 8, lambda = 0.1)
+# Run first (as you already do)
+#nb_ar_lasso_forecasts <- run_nb_sd(data_model, TRAIN_WEEK, n_lags = 8, lambda)
+
+#3.AR MODEL
+#ar_lasso_forecasts <- run_AR_model(data_model, TRAIN_WEEK, jurisdiction, n_lags_ar = 8,
+#                                   lambda)
 
 # ---- Collect non-zero SDC lag coefficients per forecast origin ----
 # AR-Lasso: Predictor looks like "SanDiego_L3"; drop any intercept rows
-ar_cf <- ar_model$df_coeffs %>%
+ar_cf <- ar_lasso_forecasts$df_coeffs %>%
   mutate(Predictor = as.character(Predictor)) %>%
   filter(grepl("_L[0-9]+$", Predictor)) %>%
   transmute(Week_Number, Lag = as.integer(sub(".*_L", "", Predictor)), Coefficient)
 
 # NB AR-Lasso: already has Lag, Coefficient, Week_Number (non-zero only)
-nb_cf <- nb_out$coeffs %>%
+nb_cf <- nb_ar_lasso_forecasts$coeffs %>%
   transmute(Week_Number, Lag = as.integer(Lag), Coefficient)
 
 # Number of forecast origins (should be 45)
-n_ar <- length(unique(ar_model$forecasts$Week_Number))
-n_nb <- length(unique(nb_out$forecasts$Week_Number))
+n_ar <- length(unique(ar_lasso_forecasts$forecasts$Week_Number))
+n_nb <- length(unique(nb_ar_lasso_forecasts$forecasts$Week_Number))
 
 # ---- Stability table: one row per lag ----
 lag_stability <- function(cf, n_origins, lags = 1:8) {
@@ -56,13 +59,13 @@ write.csv(nb_tab, "stability_NB_AR_Lasso.csv", row.names = FALSE)
 
 library(dplyr)
 
-# nb_out <- run_nb_sd(data_year, 84, n_lags = 8, lambda = 0.1)
+# nb_ar_lasso_forecasts <- run_nb_sd(data_year, 84, n_lags = 8, lambda = 0.1)
 
-theta_by_origin <- nb_out$coeffs %>%
+theta_by_origin <- nb_ar_lasso_forecasts$coeffs %>%
   group_by(Week_Number) %>%
   summarise(Theta = first(Theta), .groups = "drop")   # one theta per origin
 
-n_origins <- length(unique(nb_out$forecasts$Week_Number))   # 45
+n_origins <- length(unique(nb_ar_lasso_forecasts$forecasts$Week_Number))   # 45
 cat("Origins with a saved theta:", nrow(theta_by_origin), "of", n_origins, "\n")
 
 theta_summary <- theta_by_origin %>%
